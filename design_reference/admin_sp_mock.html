@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>集計画面 スマホ</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&amp;display=swap">
+<style>
+body{margin:0;background:#080B1F}
+a{color:#8FE9F5}a:hover{color:#C6F4FA}
+.adm{font-family:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Hiragino Sans","Noto Sans JP",sans-serif}
+.sky{position:absolute;inset:0;background:radial-gradient(110% 70% at 35% 45%,#1B1F4D 0%,rgba(27,31,77,0) 60%),#080B1F}
+.tw{position:absolute;border-radius:50%;background:#EAF0FF;animation:tw 3.2s ease-in-out infinite}
+@keyframes tw{0%,100%{opacity:.12}50%{opacity:.8}}
+.link{position:absolute;transform-origin:0 50%;background:rgba(234,240,255,.22);border-radius:3px;transition:opacity .3s,background .3s;pointer-events:none}
+.link.on{background:rgba(246,211,138,.9);box-shadow:0 0 8px rgba(246,211,138,.6)}
+.link.dim{opacity:.12}
+.node{position:absolute;border-radius:50%;border:none;padding:0;cursor:pointer;transition:opacity .3s}
+.node.star{animation:pulse 3.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+.node.sel{outline:2px solid #F6D38A;outline-offset:4px}
+.node.dim{opacity:.22}
+.node:focus-visible{outline:2px solid #8FE9F5;outline-offset:4px}
+.nlabel{position:absolute;transform:translateX(-50%);white-space:nowrap;color:#C9D1EC;font-size:10px;pointer-events:none;transition:opacity .3s;text-shadow:0 1px 4px rgba(8,11,31,.95)}
+.nlabel.strong{color:#FFF6D6;font-weight:700}
+.nlabel.dim{opacity:.22}
+.lg{display:inline-flex;align-items:center;gap:6px;color:#AEB8D9;white-space:nowrap}
+.dotc{display:inline-block;width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.panel{position:absolute;overflow-y:auto;background:rgba(14,20,51,.78);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.row{display:grid;grid-template-columns:10px minmax(0,1fr) auto auto;align-items:center;gap:10px;width:100%;min-height:44px;padding:0 6px;border:none;border-bottom:1px solid rgba(234,240,255,.08);background:none;color:#EAF0FF;font-family:inherit;font-size:14px;text-align:left;cursor:pointer}
+.row:hover,.row2:hover{background:rgba(234,240,255,.05)}
+.row2{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px;width:100%;min-height:44px;padding:0 6px;border:none;border-bottom:1px solid rgba(234,240,255,.08);background:none;color:#EAF0FF;font-family:inherit;font-size:14px;text-align:left;cursor:pointer}
+.row2.static{cursor:default;color:#C9D1EC}
+.row2.static:hover{background:none}
+.cnt{font-variant-numeric:tabular-nums;color:#F6D38A;font-weight:700}
+.back{background:none;border:none;color:#8FE9F5;font-family:inherit;font-size:14px;min-height:44px;padding:0;cursor:pointer}
+.chip2{display:inline-flex;align-items:center;height:24px;padding:0 10px;border-radius:12px;background:rgba(234,240,255,.1);color:#C9D1EC;font-size:12px}
+.sub{margin:22px 0 6px;color:#AEB8D9;font-size:13px;font-weight:700}
+.zbtn{width:44px;height:44px;border-radius:50%;border:1px solid rgba(234,240,255,.3);background:rgba(14,20,51,.85);color:#EAF0FF;font-family:inherit;font-size:20px;line-height:1.05;cursor:pointer;padding:0}
+.zbtn:hover{background:rgba(40,48,100,.9)}
+.maphint{position:absolute;margin:0;color:#7F8AB0;font-size:11px;pointer-events:none}
+.tab{height:40px;padding:0 16px;border-radius:20px;border:1px solid rgba(234,240,255,.2);background:none;color:#AEB8D9;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.tab.on{background:rgba(246,211,138,.16);border-color:#F6D38A;color:#FFF6D6}
+.badge{min-width:20px;height:20px;padding:0 6px;box-sizing:border-box;border-radius:10px;background:#F6D38A;color:#1A1E3F;font-size:12px;display:inline-flex;align-items:center;justify-content:center}
+.rcard{background:rgba(14,20,51,.82);border:1px solid rgba(234,240,255,.12);border-radius:16px;padding:18px 18px 16px;margin-bottom:14px}
+.rmeta{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;color:#AEB8D9;font-size:12px}
+.rtext{margin:12px 0 8px;color:#EAF0FF;font-size:17px;line-height:1.7}
+.rnote{margin:6px 0 0;color:#AEB8D9;font-size:12px;line-height:1.7}
+.ract{display:flex;gap:10px;margin-top:14px}
+.okb{flex:1;min-height:46px;border-radius:23px;border:none;background:#F6D38A;color:#1A1E3F;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer}
+.ngb{flex:1;min-height:46px;border-radius:23px;border:1px solid rgba(234,240,255,.35);background:none;color:#EAF0FF;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer}
+.ngb:hover{background:rgba(234,240,255,.06)}
+.drow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 4px;border-bottom:1px solid rgba(234,240,255,.08);color:#C9D1EC;font-size:13px}
+.res{font-weight:700;font-size:12px}.res.ok{color:#A8E6A1}.res.ng{color:#F2A7A0}
+</style>
+</helmet>
+<div class="adm" style="position: relative; width: 390px; height: 844px; overflow: hidden; background: #080B1F; color: #EAF0FF">
+<div class="sky"></div>
+<sc-for list="{{sky}}" as="k" hint-placeholder-count="40"><span class="tw" style="left: {{k.x}}px; top: {{k.y}}px; width: {{k.s}}px; height: {{k.s}}px; animation-delay: {{k.d}}s"></span></sc-for>
+<div style="position: absolute; left: 16px; right: 16px; top: 12px">
+<div style="display: flex; gap: 8px"><button class="{{tabMapCls}}" onClick="{{toMap}}">テーマのつながり</button><button class="{{tabRvCls}}" onClick="{{toReview}}">承認待ち<span class="badge">{{pendingCount}}</span></button></div>
+<sc-if value="{{isMap}}" hint-placeholder-val="{{ true }}"><div style="display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 8px; font-size: 11px"><span class="lg"><span class="dotc" style="background: #F6D38A"></span>食</span><span class="lg"><span class="dotc" style="background: #8FE9F5"></span>移動</span><span class="lg"><span class="dotc" style="background: #A8E6A1"></span>学び</span><span class="lg"><span class="dotc" style="background: #F2A7A0"></span>住まい</span><span class="lg"><span class="dotc" style="background: #B9A8FF"></span>インフラ</span><span class="lg"><span class="dotc" style="background: #FFF6D6; box-shadow: 0 0 6px #F6D38A"></span>恒星＝回答</span><span class="lg">線の太さ＝つながった回数</span></div></sc-if>
+</div>
+<sc-if value="{{isMap}}" hint-placeholder-val="{{ true }}">
+<div style="position: absolute; left: 0px; top: 96px; width: 390px; height: 420px; overflow: hidden; touch-action: none; cursor: grab" onPointerDown="{{pDown}}" onPointerMove="{{pMove}}" onPointerUp="{{pUp}}" onPointerCancel="{{pUp}}" onPointerLeave="{{pUp}}" onWheel="{{wheel}}" onClick="{{mapClear}}">
+<div style="position: absolute; left: 0; top: 0; width: 390px; height: 420px; transform-origin: 0 0; transform: translate({{tx}}px, {{ty}}px) scale({{sc}})">
+<sc-for list="{{lines}}" as="l" hint-placeholder-count="22"><span class="{{l.cls}}" style="left: {{l.x}}px; top: {{l.y}}px; width: {{l.len}}px; height: {{l.w}}px; margin-top: -{{l.half}}px; transform: rotate({{l.deg}}deg)"></span></sc-for>
+<sc-for list="{{nodes}}" as="nd" hint-placeholder-count="25"><button class="{{nd.cls}}" style="left: {{nd.x}}px; top: {{nd.y}}px; width: {{nd.d}}px; height: {{nd.d}}px; background: {{nd.bg}}; box-shadow: {{nd.glow}}" onClick="{{nd.pick}}" aria-label="{{nd.aria}}"></button><span class="{{nd.lcls}}" style="left: {{nd.lx}}px; top: {{nd.ly}}px">{{nd.label}}</span></sc-for>
+</div>
+</div>
+<p class="maphint" style="left: 16px; top: 100px">指でずらす／2本指か＋−で拡大</p>
+<div style="position: absolute; left: 334px; top: 352px; display: flex; flex-direction: column; gap: 8px">
+<button class="zbtn" onClick="{{zin}}" aria-label="拡大">＋</button>
+<button class="zbtn" onClick="{{zout}}" aria-label="縮小">−</button>
+<button class="zbtn" onClick="{{zreset}}" aria-label="元の大きさに戻す" style="font-size: 13px">元に<br>戻す</button>
+</div>
+<div class="panel" style="left: 0; right: 0; top: 516px; bottom: 0; box-sizing: border-box; padding: 16px 16px 24px; border-top: 1px solid rgba(234, 240, 255, 0.14); border-radius: 20px 20px 0 0">
+<sc-if value="{{isTable}}" hint-placeholder-val="{{ true }}">
+<h2 style="margin: 0; color: #EAF0FF; font-size: 17px">表示されたテーマ</h2>
+<p style="margin: 6px 0 12px; color: #AEB8D9; font-size: 13px; line-height: 1.6">惑星か行をタップすると、つながりを表示します</p>
+<div style="display: grid; grid-template-columns: 10px minmax(0, 1fr) auto auto; gap: 10px; padding: 0 6px 6px; color: #AEB8D9; font-size: 12px; border-bottom: 1px solid rgba(234, 240, 255, 0.16)"><span></span><span>テーマ</span><span>分野</span><span>表示回数</span></div>
+<sc-for list="{{themes}}" as="r" hint-placeholder-count="18"><button class="row" onClick="{{r.pick}}"><span class="dotc" style="background: {{r.color}}"></span><span>{{r.label}}</span><span style="color: #AEB8D9; font-size: 12px">{{r.cat}}</span><span class="cnt">{{r.n}}</span></button></sc-for>
+</sc-if>
+<sc-if value="{{isDetail}}" hint-placeholder-val="{{ false }}">
+<button class="back" onClick="{{clear}}">← 一覧にもどる</button>
+<div style="display: flex; align-items: center; gap: 10px; margin-top: 2px">
+<span class="dotc" style="width: 14px; height: 14px; background: {{dColor}}"></span>
+<h2 style="margin: 0; color: #EAF0FF; font-size: 17px">{{dName}}</h2>
+<span class="chip2">{{dCat}}</span>
+</div>
+<div style="display: flex; align-items: baseline; gap: 10px; margin-top: 12px"><span style="color: #AEB8D9; font-size: 13px">{{dCountLabel}}</span><span class="cnt" style="font-size: 26px">{{dCount}}</span></div>
+<sc-if value="{{hasIn}}" hint-placeholder-val="{{ true }}">
+<h3 class="sub">どこから来たか（多い順）</h3>
+<sc-for list="{{inRows}}" as="r" hint-placeholder-count="3"><button class="{{r.cls}}" onClick="{{r.pick}}"><span>{{r.label}}</span><span class="cnt">{{r.n}}</span></button></sc-for>
+</sc-if>
+<sc-if value="{{hasOut}}" hint-placeholder-val="{{ true }}">
+<h3 class="sub">{{outTitle}}</h3>
+<sc-for list="{{outRows}}" as="r" hint-placeholder-count="2"><button class="{{r.cls}}" onClick="{{r.pick}}"><span>{{r.label}}</span><span class="cnt">{{r.n}}</span></button></sc-for>
+</sc-if>
+</sc-if>
+</div>
+</sc-if>
+<sc-if value="{{isReview}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; left: 0; top: 64px; width: 390px; height: 780px; overflow-y: auto; box-sizing: border-box; padding: 8px 16px 32px">
+<div style="max-width: 720px; margin: 0 auto">
+<p style="margin: 0 0 14px; color: #AEB8D9; font-size: 13px; line-height: 1.6">AIが判定に迷ったコメントです。子どもには「受け取ったよ」とだけ表示されています。承認するとメーターが増え、承認しないときは下の問いかけが子どもに返ります。</p>
+<sc-if value="{{hasPending}}" hint-placeholder-val="{{ true }}">
+<sc-for list="{{reviews}}" as="r" hint-placeholder-count="4">
+<div class="rcard">
+<div class="rmeta"><span class="chip2">{{r.age}}</span><span>{{r.when}}</span><span>「{{r.video}}」へのコメント</span></div>
+<p class="rtext">{{r.text}}</p>
+<p class="rnote">基準：{{r.rule}}<br>AIの見立て：{{r.reason}}</p>
+<p class="rnote">承認しないときに返す問いかけ：「{{r.ask}}」</p>
+<div class="ract"><button class="okb" onClick="{{r.ok}}">承認する</button><button class="ngb" onClick="{{r.ng}}">承認しない</button></div>
+</div>
+</sc-for>
+</sc-if>
+<sc-if value="{{noPending}}" hint-placeholder-val="{{ false }}"><p style="margin: 24px 0; text-align: center; color: #C9D1EC; font-size: 15px">承認待ちはありません</p></sc-if>
+<sc-if value="{{hasDone}}" hint-placeholder-val="{{ false }}">
+<h3 class="sub">処理したもの</h3>
+<sc-for list="{{doneItems}}" as="d" hint-placeholder-count="2"><div class="drow"><span>{{d.text}}</span><span class="{{d.cls}}">{{d.result}}</span></div></sc-for>
+</sc-if>
+</div>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.L = {"mapW": 390, "mapH": 420, "W": 390, "H": 844, "cx": 195, "cy": 205, "rx": 178, "ry": 186, "rings": [0.36, 0.66, 0.93], "scale": 0.62, "lineScale": 0.75, "stars": 40};
+    this.CAT = {
+      food: { name: '食', c: '#F6D38A', dark: '#7E5F22' },
+      move: { name: '移動', c: '#8FE9F5', dark: '#22626C' },
+      learn: { name: '学び', c: '#A8E6A1', dark: '#356B30' },
+      home: { name: '住まい', c: '#F2A7A0', dark: '#7E413B' },
+      infra: { name: 'インフラ', c: '#B9A8FF', dark: '#433486' },
+      answer: { name: '回答', c: '#FFF6D6', dark: '#C9A55A' }
+    };
+    this.NODES = [
+      { id: 'a_bread', label: 'パン', cat: 'answer', n: 420, a: 200, ring: 0 },
+      { id: 'a_rice', label: 'ごはん', cat: 'answer', n: 380, a: 250, ring: 0 },
+      { id: 'a_milk', label: '牛乳', cat: 'answer', n: 260, a: 300, ring: 0 },
+      { id: 'a_train', label: '電車', cat: 'answer', n: 190, a: 350, ring: 0 },
+      { id: 'a_fish', label: '魚', cat: 'answer', n: 150, a: 40, ring: 0 },
+      { id: 'a_school', label: '学校', cat: 'answer', n: 510, a: 95, ring: 0 },
+      { id: 'a_home', label: '家', cat: 'answer', n: 300, a: 145, ring: 0 },
+      { id: 'bakery', label: 'パン工房', cat: 'food', a: 190, ring: 1 },
+      { id: 'wheat', label: '小麦農家', cat: 'food', a: 215, ring: 1 },
+      { id: 'ricefarm', label: '米農家', cat: 'food', a: 255, ring: 1 },
+      { id: 'dairy', label: '酪農家', cat: 'food', a: 300, ring: 1 },
+      { id: 'rail', label: '線路点検', cat: 'move', a: 350, ring: 1 },
+      { id: 'fisher', label: '漁師', cat: 'food', a: 38, ring: 1 },
+      { id: 'lunch', label: '給食センター', cat: 'learn', a: 85, ring: 1 },
+      { id: 'textbook', label: '教科書をつくる人', cat: 'learn', a: 112, ring: 1 },
+      { id: 'carpenter', label: '大工', cat: 'home', a: 140, ring: 1 },
+      { id: 'furniture', label: '家具工場', cat: 'home', a: 165, ring: 1 },
+      { id: 'elec', label: '電気（発電所）', cat: 'infra', a: 15, ring: 2 },
+      { id: 'gas', label: 'ガス', cat: 'infra', a: 62, ring: 2 },
+      { id: 'water', label: '水道（浄水場）', cat: 'infra', a: 118, ring: 2 },
+      { id: 'garbage', label: 'ごみ収集', cat: 'infra', a: 160, ring: 2 },
+      { id: 'mill', label: '製粉工場', cat: 'food', a: 228, ring: 2 },
+      { id: 'truck', label: '配送トラック', cat: 'move', a: 272, ring: 2 },
+      { id: 'road', label: '道路工事', cat: 'move', a: 305, ring: 2 },
+      { id: 'net', label: '通信', cat: 'infra', a: 335, ring: 2 }
+    ];
+    this.LINKS = [
+      ['a_bread', 'bakery', 300], ['a_bread', 'wheat', 120], ['bakery', 'wheat', 90], ['wheat', 'mill', 90],
+      ['bakery', 'truck', 110], ['bakery', 'elec', 130],
+      ['a_rice', 'ricefarm', 300], ['ricefarm', 'truck', 80], ['ricefarm', 'water', 60],
+      ['a_milk', 'dairy', 220], ['dairy', 'truck', 70],
+      ['a_train', 'rail', 170], ['rail', 'elec', 90],
+      ['a_fish', 'fisher', 140], ['fisher', 'truck', 40],
+      ['a_school', 'lunch', 290], ['a_school', 'textbook', 60], ['lunch', 'water', 70], ['lunch', 'gas', 60],
+      ['a_home', 'carpenter', 120], ['a_home', 'furniture', 70],
+      ['truck', 'road', 80]
+    ];
+    this.INFRA = { elec: 190, water: 230, gas: 90, garbage: 200, net: 90 };
+    const inc = {};
+    this.LINKS.forEach((l) => { inc[l[1]] = (inc[l[1]] || 0) + l[2]; });
+    const L = this.L;
+    this.byId = {};
+    this.NODES.forEach((nd) => {
+      if (nd.cat !== 'answer') nd.n = (inc[nd.id] || 0) + (this.INFRA[nd.id] || 0);
+      const t = nd.a * Math.PI / 180;
+      nd.x = L.cx + L.rx * L.rings[nd.ring] * Math.cos(t);
+      nd.y = L.cy + L.ry * L.rings[nd.ring] * Math.sin(t);
+      nd.d = (nd.cat === 'answer' ? 30 + Math.sqrt(nd.n) * 1.2 : 14 + Math.sqrt(nd.n) * 1.6) * L.scale;
+      this.byId[nd.id] = nd;
+    });
+    let seed = 11;
+    const rnd = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
+    this.SKY = [];
+    for (let i = 0; i < L.stars; i++) {
+      this.SKY.push({ x: Math.round(rnd() * (L.W - 4)), y: Math.round(rnd() * (L.H - 4)), s: rnd() < 0.2 ? 2.5 : 1.5, d: -Math.round(rnd() * 320) / 100 });
+    }
+    this.REVIEW = [
+      { id: 'r1', age: '小学生', when: '10/1 21:42', video: '夜明け前のパン工房', text: 'パンやさんのおじさん、ねむそうだった', rule: 'ゆるめ（動画の中身に1つでも触れていればOK）', reason: '中身には触れているが、感謝や応援として読めるか迷う', ask: 'おじさんは、何時ごろからパンを作っていたかな？' },
+      { id: 'r2', age: '中学生以上', when: '10/1 22:05', video: '終電のあとの線路点検', text: '夜中に働くのは、自分には無理だなと思った', rule: 'ふつう（相手の手間か、自分とのつながりがあればOK）', reason: '相手の手間には触れているが、自分の感想が中心', ask: '夜中に働く人がいるから、どんなことができているかな？' },
+      { id: 'r3', age: '中学生以上', when: '10/1 22:31', video: '牛乳がとどくまで', text: '牛かわいい。牛乳はあんまり飲まないけど', rule: 'ふつう（相手の手間か、自分とのつながりがあればOK）', reason: '中身には触れているが、手間やつながりが見当たらない', ask: '牛乳がとどくまでに、だれがどんなことをしていたかな？' },
+      { id: 'r4', age: '小学生', when: '10/1 20:58', video: '給食センターの朝', text: 'きゅうしょくのカレーすき', rule: 'ゆるめ（動画の中身に1つでも触れていればOK）', reason: '自分とのつながりはあるが、作る人への気持ちが読み取れない', ask: 'カレーを作る人たちは、どんなところが大変そうだった？' }
+    ];
+    const rv = {};
+    this.REVIEW.forEach((r) => { rv[r.id] = 'pending'; });
+    this.state = { sel: null, view: { s: 1, tx: 0, ty: 0 }, tab: 'map', rv };
+    this.ptrs = {};
+    this.dragged = false;
+    this.gStart = null;
+  }
+  clampS(v) { return Math.max(0.6, Math.min(3.2, v)); }
+  localPt(e) {
+    const r = e.currentTarget.getBoundingClientRect();
+    const k = (r.width / this.L.mapW) || 1;
+    return { x: (e.clientX - r.left) / k, y: (e.clientY - r.top) / k };
+  }
+  snap() { return { v: Object.assign({}, this.state.view), ptrs: JSON.parse(JSON.stringify(this.ptrs)) }; }
+  pDown(e) {
+    if (Object.keys(this.ptrs).length === 0) this.dragged = false;
+    this.ptrs[e.pointerId] = this.localPt(e);
+    this.gStart = this.snap();
+  }
+  pMove(e) {
+    if (!(e.pointerId in this.ptrs) || !this.gStart) return;
+    this.ptrs[e.pointerId] = this.localPt(e);
+    const ids = Object.keys(this.ptrs);
+    const g = this.gStart;
+    const v0 = g.v;
+    if (ids.length === 1) {
+      const p0 = g.ptrs[ids[0]];
+      const p = this.ptrs[ids[0]];
+      if (!p0) return;
+      const dx = p.x - p0.x;
+      const dy = p.y - p0.y;
+      if (!this.dragged && Math.abs(dx) + Math.abs(dy) < 6) return;
+      this.dragged = true;
+      this.setState({ view: { s: v0.s, tx: v0.tx + dx, ty: v0.ty + dy } });
+    } else {
+      const a0 = g.ptrs[ids[0]];
+      const b0 = g.ptrs[ids[1]];
+      if (!a0 || !b0) return;
+      const A = this.ptrs[ids[0]];
+      const B = this.ptrs[ids[1]];
+      const d0 = Math.hypot(b0.x - a0.x, b0.y - a0.y) || 1;
+      const d1 = Math.hypot(B.x - A.x, B.y - A.y);
+      const m0x = (a0.x + b0.x) / 2;
+      const m0y = (a0.y + b0.y) / 2;
+      const m1x = (A.x + B.x) / 2;
+      const m1y = (A.y + B.y) / 2;
+      const sNew = this.clampS(v0.s * d1 / d0);
+      const wx = (m0x - v0.tx) / v0.s;
+      const wy = (m0y - v0.ty) / v0.s;
+      this.dragged = true;
+      this.setState({ view: { s: sNew, tx: m1x - wx * sNew, ty: m1y - wy * sNew } });
+    }
+  }
+  pUp(e) {
+    if (!(e.pointerId in this.ptrs)) return;
+    delete this.ptrs[e.pointerId];
+    this.gStart = this.snap();
+  }
+  decide(id, ok) { this.setState((st) => ({ rv: Object.assign({}, st.rv, { [id]: ok ? 'ok' : 'ng' }) })); }
+  zoomAt(f, px, py) {
+    const v = this.state.view;
+    const sNew = this.clampS(v.s * f);
+    const wx = (px - v.tx) / v.s;
+    const wy = (py - v.ty) / v.s;
+    this.setState({ view: { s: sNew, tx: px - wx * sNew, ty: py - wy * sNew } });
+  }
+  renderVals() {
+    const sel = this.state.sel;
+    const L = this.L;
+    const related = {};
+    if (sel) {
+      related[sel] = true;
+      this.LINKS.forEach((l) => { if (l[0] === sel) related[l[1]] = true; if (l[1] === sel) related[l[0]] = true; });
+    }
+    const lines = this.LINKS.map((l) => {
+      const A = this.byId[l[0]];
+      const B = this.byId[l[1]];
+      const dx = B.x - A.x;
+      const dy = B.y - A.y;
+      const on = !!sel && (l[0] === sel || l[1] === sel);
+      const w = Math.min(5, 1 + l[2] / 80) * (on ? 1.3 : 1) * L.lineScale;
+      return {
+        x: A.x.toFixed(1), y: A.y.toFixed(1), len: Math.sqrt(dx * dx + dy * dy).toFixed(1),
+        w: w.toFixed(2), half: (w / 2).toFixed(2), deg: (Math.atan2(dy, dx) * 180 / Math.PI).toFixed(2),
+        cls: on ? 'link on' : (sel ? 'link dim' : 'link')
+      };
+    });
+    const nodes = this.NODES.map((nd) => {
+      const cat = this.CAT[nd.cat];
+      const isA = nd.cat === 'answer';
+      const dim = !!sel && !related[nd.id];
+      return {
+        x: (nd.x - nd.d / 2).toFixed(1), y: (nd.y - nd.d / 2).toFixed(1), d: nd.d.toFixed(1),
+        lx: nd.x.toFixed(1), ly: (nd.y + nd.d / 2 + (isA ? -4 : 3)).toFixed(1),
+        label: nd.label, aria: nd.label,
+        bg: isA ? 'radial-gradient(circle at 50% 50%, #FFFFFF 0%, #FFF6D6 28%, rgba(246,211,138,0.55) 55%, rgba(246,211,138,0) 72%)'
+                : 'radial-gradient(circle at 34% 30%, #FFFFFF 0%, ' + cat.c + ' 32%, ' + cat.dark + ' 100%)',
+        glow: isA ? 'none' : '0 0 ' + Math.round(nd.d * 0.5) + 'px ' + cat.c + '66',
+        cls: (isA ? 'node star' : 'node planet') + (sel === nd.id ? ' sel' : '') + (dim ? ' dim' : ''),
+        lcls: (isA ? 'nlabel strong' : 'nlabel') + (dim ? ' dim' : ''),
+        pick: (e) => { if (e && e.stopPropagation) e.stopPropagation(); if (this.dragged) return; this.setState({ sel: this.state.sel === nd.id ? null : nd.id }); }
+      };
+    });
+    const themes = this.NODES.filter((nd) => nd.cat !== 'answer').slice().sort((p, q) => q.n - p.n).map((nd) => ({
+      label: nd.label, cat: this.CAT[nd.cat].name, color: this.CAT[nd.cat].c, n: nd.n + '回',
+      pick: () => this.setState({ sel: nd.id })
+    }));
+    const vals = {
+      sky: this.SKY, lines, nodes, themes,
+      isTable: !sel, isDetail: !!sel,
+      clear: () => this.setState({ sel: null }),
+      mapClear: () => { if (!this.dragged) this.setState({ sel: null }); },
+      isMap: this.state.tab === 'map', isReview: this.state.tab === 'review',
+      tabMapCls: this.state.tab === 'map' ? 'tab on' : 'tab', tabRvCls: this.state.tab === 'review' ? 'tab on' : 'tab',
+      toMap: () => this.setState({ tab: 'map' }), toReview: () => this.setState({ tab: 'review' }),
+      pendingCount: this.REVIEW.filter((r) => this.state.rv[r.id] === 'pending').length,
+      reviews: this.REVIEW.filter((r) => this.state.rv[r.id] === 'pending').map((r) => Object.assign({}, r, { ok: () => this.decide(r.id, true), ng: () => this.decide(r.id, false) })),
+      doneItems: this.REVIEW.filter((r) => this.state.rv[r.id] !== 'pending').map((r) => ({ text: r.text, result: this.state.rv[r.id] === 'ok' ? '承認した' : '承認しない（問いかけを返す）', cls: this.state.rv[r.id] === 'ok' ? 'res ok' : 'res ng' })),
+      hasPending: this.REVIEW.some((r) => this.state.rv[r.id] === 'pending'),
+      noPending: !this.REVIEW.some((r) => this.state.rv[r.id] === 'pending'),
+      hasDone: this.REVIEW.some((r) => this.state.rv[r.id] !== 'pending'),
+      tx: this.state.view.tx.toFixed(1), ty: this.state.view.ty.toFixed(1), sc: this.state.view.s.toFixed(3),
+      pDown: (e) => this.pDown(e), pMove: (e) => this.pMove(e), pUp: (e) => this.pUp(e),
+      wheel: (e) => { const p = this.localPt(e); this.zoomAt(Math.exp(-e.deltaY * 0.0015), p.x, p.y); },
+      zin: () => this.zoomAt(1.3, L.mapW / 2, L.mapH / 2),
+      zout: () => this.zoomAt(1 / 1.3, L.mapW / 2, L.mapH / 2),
+      zreset: () => this.setState({ view: { s: 1, tx: 0, ty: 0 } }),
+      dName: '', dCat: '', dColor: '#FFF', dCountLabel: '', dCount: '', inRows: [], outRows: [], hasIn: false, hasOut: false, outTitle: ''
+    };
+    if (sel) {
+      const nd = this.byId[sel];
+      const isA = nd.cat === 'answer';
+      const inRows = this.LINKS.filter((l) => l[1] === sel).map((l) => ({ label: this.byId[l[0]].label + ' から', v: l[2], cls: 'row2', pick: () => this.setState({ sel: l[0] }) }));
+      if (this.INFRA[sel]) inRows.push({ label: 'インフラ枠（回答と関係なく表示）', v: this.INFRA[sel], cls: 'row2 static', pick: () => {} });
+      inRows.sort((p, q) => q.v - p.v);
+      const outRows = this.LINKS.filter((l) => l[0] === sel).sort((p, q) => q[2] - p[2]).map((l) => ({ label: this.byId[l[1]].label + ' へ', v: l[2], cls: 'row2', pick: () => this.setState({ sel: l[1] }) }));
+      Object.assign(vals, {
+        dName: nd.label, dCat: this.CAT[nd.cat].name, dColor: this.CAT[nd.cat].c,
+        dCountLabel: isA ? '選ばれた回数' : '表示回数', dCount: nd.n + '回',
+        inRows: inRows.map((r) => Object.assign(r, { n: r.v + '回' })),
+        outRows: outRows.map((r) => Object.assign(r, { n: r.v + '回' })),
+        hasIn: inRows.length > 0, hasOut: outRows.length > 0,
+        outTitle: isA ? 'つながったテーマ（多い順）' : 'つながる先'
+      });
+    }
+    return vals;
+  }
+}
+</script>
+</body>
+</html>

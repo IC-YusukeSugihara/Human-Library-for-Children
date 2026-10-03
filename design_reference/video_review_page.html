@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>動画候補の審査</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&display=swap">
+<style>
+:root{--bg:#F4F5FB;--panel:#FFFFFF;--panel2:#E9ECF6;--text:#1A1E3F;--sub:#545B80;--line:rgba(26,30,63,.13);--accent:#A8751C;--okbg:#F6D38A;--onok:#1A1E3F;--link:#1C6E7A;--warn:#8A4519;--warnbg:#FCEBDD;--ok:#2F7A3B;--ng:#A33B3B;--chip:rgba(26,30,63,.06);--glow:rgba(168,117,28,.0)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#080B1F;--panel:#121838;--panel2:#0C1230;--text:#EAF0FF;--sub:#AEB8D9;--line:rgba(234,240,255,.13);--accent:#F6D38A;--okbg:#F6D38A;--onok:#1A1E3F;--link:#8FE9F5;--warn:#F6C08A;--warnbg:rgba(246,192,138,.11);--ok:#A8E6A1;--ng:#F2A7A0;--chip:rgba(234,240,255,.08);--glow:rgba(246,211,138,.18)}}
+:root[data-theme="dark"]{--bg:#080B1F;--panel:#121838;--panel2:#0C1230;--text:#EAF0FF;--sub:#AEB8D9;--line:rgba(234,240,255,.13);--accent:#F6D38A;--okbg:#F6D38A;--onok:#1A1E3F;--link:#8FE9F5;--warn:#F6C08A;--warnbg:rgba(246,192,138,.11);--ok:#A8E6A1;--ng:#F2A7A0;--chip:rgba(234,240,255,.08);--glow:rgba(246,211,138,.18)}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif;-webkit-text-size-adjust:100%}
+a{color:var(--link)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px 40px}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding:14px 0 10px;border-bottom:1px solid var(--line)}
+h1{margin:0;font-size:20px;letter-spacing:.02em}
+.sum{margin:4px 0 0;color:var(--sub);font-size:13px}
+.filters{display:flex;flex-wrap:wrap;gap:10px 18px;margin-top:12px}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{min-height:40px;padding:0 14px;border-radius:20px;border:1px solid var(--line);background:none;color:var(--sub);font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.seg button.on{background:var(--chip);color:var(--text);border-color:var(--accent);box-shadow:0 0 12px var(--glow)}
+.seg .n{font-variant-numeric:tabular-nums;opacity:.8;margin-left:4px}
+.tools{margin:14px 0 0;border:1px solid var(--line);border-radius:14px;background:var(--panel)}
+.tools summary{cursor:pointer;padding:12px 14px;font-size:14px;font-weight:700;list-style:none;min-height:44px;display:flex;align-items:center;gap:8px}
+.tools summary::-webkit-details-marker{display:none}
+.tools .in{padding:0 14px 14px;font-size:13px;line-height:1.7;color:var(--sub)}
+.tools ol{margin:0 0 10px;padding-left:20px}
+.tools textarea{width:100%;height:120px;font:12px/1.5 ui-monospace,Menlo,Consolas,monospace;color:var(--text);background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:8px}
+.file{display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border-radius:22px;background:var(--okbg);color:var(--onok);font-weight:700;cursor:pointer;margin-top:10px}
+.file input{display:none}
+.msg{margin-top:8px;color:var(--text)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px;margin-top:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+.thumb{aspect-ratio:16/9;background:var(--panel2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:var(--sub);font-size:12px}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb b{font-size:15px;color:var(--text)}
+.body{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{display:flex;flex-wrap:wrap;gap:6px;font-size:11px}
+.chip{padding:3px 9px;border-radius:10px;background:var(--chip);color:var(--sub)}
+.chip.cat{color:var(--text);font-weight:700}
+.title{font-size:15px;font-weight:700;line-height:1.5;margin:0;overflow-wrap:anywhere}
+.summary{font-size:13px;line-height:1.7;color:var(--sub);margin:0}
+.job{font-size:12px;color:var(--sub);margin:0}
+.memo{font-size:12px;line-height:1.6;padding:6px 10px;border-radius:8px;background:var(--warnbg);color:var(--warn);margin:0}
+.actions{margin-top:auto;padding-top:4px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.yt{font-size:13px;font-weight:700;text-decoration:none;min-height:44px;display:inline-flex;align-items:center;margin-right:auto}
+.btn{min-height:44px;padding:0 18px;border-radius:22px;font:inherit;font-weight:700;font-size:14px;cursor:pointer;border:1px solid var(--line);background:none;color:var(--text)}
+.btn.ok{background:var(--okbg);color:var(--onok);border-color:transparent}
+.btn:disabled{opacity:.5;cursor:default}
+.badge{font-size:13px;font-weight:700;margin-right:auto}
+.badge.approved{color:var(--ok)}.badge.rejected{color:var(--ng)}
+.empty{margin:40px 0;text-align:center;color:var(--sub);font-size:14px}
+.toast{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 16px;font-size:13px;box-shadow:0 6px 24px rgba(0,0,0,.25)}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+(function () {
+  var S = { docs: [], cat: 'all', status: 'pending', busy: {}, canWrite: true, assets: null, loaded: false, error: '', importMsg: '', toolsOpen: false, toast: '' };
+  var db = null;
+  var CATS = [['all', 'すべて'], ['お米', 'お米'], ['パン', 'パン'], ['運送', '運送']];
+  var STS = [['pending', '未審査'], ['approved', '承認'], ['rejected', '拒否']];
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function st(d) { return d.status === 'approved' || d.status === 'rejected' ? d.status : 'pending'; }
+  function inCat(d) { return S.cat === 'all' || d.cat === S.cat; }
+  function toast(t) { S.toast = t; render(); setTimeout(function () { if (S.toast === t) { S.toast = ''; render(); } }, 3500); }
+
+  function render() {
+    var app = document.getElementById('app');
+    var all = S.docs;
+    var n = { pending: 0, approved: 0, rejected: 0 };
+    all.forEach(function (d) { n[st(d)]++; });
+    var catDocs = all.filter(inCat);
+    var cn = { pending: 0, approved: 0, rejected: 0 };
+    catDocs.forEach(function (d) { cn[st(d)]++; });
+    var list = catDocs.filter(function (d) { return st(d) === S.status; });
+
+    var h = '<header><h1>動画候補の審査</h1>';
+    h += '<p class="sum">全' + all.length + '本　未審査 ' + n.pending + '／承認 ' + n.approved + '／拒否 ' + n.rejected + '</p>';
+    var cats = [['all', 'すべて']]; var seen = {};
+    all.forEach(function (d) { if (d.cat && !seen[d.cat]) { seen[d.cat] = true; cats.push([d.cat, d.cat]); } });
+    h += '<div class="filters"><div class="seg" role="group" aria-label="カテゴリ">';
+    cats.forEach(function (c) { h += '<button data-cat="' + c[0] + '" class="' + (S.cat === c[0] ? 'on' : '') + '">' + c[1] + '</button>'; });
+    h += '</div><div class="seg" role="group" aria-label="状態">';
+    STS.forEach(function (s) { h += '<button data-st="' + s[0] + '" class="' + (S.status === s[0] ? 'on' : '') + '">' + s[1] + '<span class="n">' + cn[s[0]] + '</span></button>'; });
+    h += '</div></div></header>';
+
+    if (S.assets && all.length) {
+      var missing = all.filter(function (d) { return !d.thumb; });
+      h += '<details class="tools"' + (S.toolsOpen ? ' open' : '') + '><summary>サムネの取り込み（PCで使います）　未登録 ' + missing.length + '本</summary><div class="in">';
+      h += '<ol><li>下の文章をコピーして、PCのClaude（Chromeを操作できる環境）に送ると、サムネ画像がダウンロードフォルダに保存されます。</li><li>「画像を選んで取り込む」を押し、保存された画像をまとめて選びます。ファイル名（動画ID）で自動的に対応する動画に入ります。</li></ol>';
+      var lines = ['次のYouTubeサムネ画像を、Chromeで開いて1枚ずつダウンロードしてください。', '・保存名は「動画ID.jpg」にする（URLの /vi/ と /mqdefault の間が動画ID）', '・保存先はダウンロードフォルダ', '・全部で ' + missing.length + ' 枚', ''];
+      missing.forEach(function (d) { lines.push('https://i.ytimg.com/vi/' + d.id + '/mqdefault.jpg'); });
+      h += '<textarea readonly aria-label="PCのClaudeに送る文章">' + esc(lines.join('\n')) + '</textarea>';
+      h += '<label class="file">画像を選んで取り込む<input type="file" accept="image/*" multiple id="thumbfiles"></label>';
+      if (S.importMsg) h += '<div class="msg">' + esc(S.importMsg) + '</div>';
+      h += '</div></details>';
+    }
+
+    if (S.error) {
+      h += '<p class="empty">保存機能につながらないため、一覧を表示できません。ページを開き直してください。</p>';
+    } else if (!S.loaded) {
+      h += '<p class="empty">読み込み中…</p>';
+    } else if (!all.length) {
+      h += '<p class="empty">候補がまだありません。</p>';
+    } else if (!list.length) {
+      h += '<p class="empty">この条件の動画はありません。</p>';
+    } else {
+      h += '<div class="grid">';
+      list.forEach(function (d) {
+        var busy = !!S.busy[d.id];
+        h += '<article class="card"><div class="thumb">';
+        if (d.thumb) h += '<img src="/_blob/' + esc(d.thumb) + '" alt="" loading="lazy">';
+        else h += '<b>' + esc(d.cat) + '</b><span>サムネ未登録</span>';
+        h += '</div><div class="body"><div class="meta"><span class="chip cat">' + esc(d.cat) + '</span><span class="chip">' + esc(d.kind) + '</span>';
+        if (d.length) h += '<span class="chip">' + esc(d.length) + '</span>';
+        if (d.channel) h += '<span class="chip">' + esc(d.channel) + '</span>';
+        h += '</div><h2 class="title">' + esc(d.title) + '</h2>';
+        h += '<p class="summary">' + esc(d.summary) + '</p>';
+        if (d.job) h += '<p class="job">映っている仕事：' + esc(d.job) + '</p>';
+        if (d.memo) h += '<p class="memo">' + esc(d.memo) + '</p>';
+        h += '<div class="actions"><a class="yt" href="' + esc(d.url) + '" target="_blank" rel="noopener">YouTubeで見る ↗</a>';
+        if (S.canWrite) {
+          if (st(d) === 'pending') {
+            h += '<button class="btn" data-act="rejected" data-id="' + esc(d.id) + '"' + (busy ? ' disabled' : '') + '>拒否</button>';
+            h += '<button class="btn ok" data-act="approved" data-id="' + esc(d.id) + '"' + (busy ? ' disabled' : '') + '>承認</button>';
+          } else {
+            h += '<span class="badge ' + st(d) + '">' + (st(d) === 'approved' ? '承認済み' : '拒否済み') + '</span>';
+            h += '<button class="btn" data-act="pending" data-id="' + esc(d.id) + '"' + (busy ? ' disabled' : '') + '>未審査に戻す</button>';
+          }
+        }
+        h += '</div></div></article>';
+      });
+      h += '</div>';
+    }
+    if (S.toast) h += '<div class="toast" role="status">' + esc(S.toast) + '</div>';
+    app.innerHTML = h;
+  }
+
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('button');
+    if (!b) return;
+    if (b.dataset.cat) { S.cat = b.dataset.cat; render(); return; }
+    if (b.dataset.st) { S.status = b.dataset.st; render(); return; }
+    if (b.dataset.act && b.dataset.id) decide(b.dataset.id, b.dataset.act);
+  });
+  document.addEventListener('toggle', function (e) { if (e.target.classList && e.target.classList.contains('tools')) S.toolsOpen = e.target.open; }, true);
+  document.addEventListener('change', function (e) { if (e.target && e.target.id === 'thumbfiles' && e.target.files.length) importThumbs(Array.prototype.slice.call(e.target.files)); });
+
+  function wait(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+  async function write(id, body) {
+    try { await db.doc('videos/' + id).update(body); }
+    catch (err) {
+      if (err && err.code === 'unavailable') { await wait(500 + Math.random() * 700); await db.doc('videos/' + id).update(body); }
+      else throw err;
+    }
+  }
+  async function decide(id, status) {
+    if (!db || S.busy[id]) return;
+    S.busy[id] = true; render();
+    try { await write(id, { status: status, decidedAt: status === 'pending' ? '' : new Date().toISOString() }); }
+    catch (err) {
+      if (err && err.code === 'invalid_argument') { S.canWrite = false; toast('このページでは保存できない権限です'); }
+      else toast('保存できませんでした。もう一度押してください');
+    }
+    delete S.busy[id]; render();
+  }
+  async function importThumbs(files) {
+    if (!S.assets || !db || S.importing) return;
+    S.importing = true;
+    var ids = {}; S.docs.forEach(function (d) { if (!d.thumb) ids[d.id] = true; });
+    var list = files.map(function (f) { return { f: f, id: f.name.replace(/\.[^.]+$/, '').trim() }; }).filter(function (x) { return ids[x.id]; });
+    var skipped = files.length - list.length, done = 0, failed = 0;
+    S.toolsOpen = true;
+    for (var i = 0; i < list.length; i++) {
+      S.importMsg = '取り込み中… ' + done + ' / ' + list.length; render();
+      try { var r = await S.assets.upload(list[i].f); await write(list[i].id, { thumb: r.id }); done++; }
+      catch (err) { failed++; }
+    }
+    S.importing = false;
+    S.importMsg = '取り込み完了：' + done + '本' + (failed ? '／失敗 ' + failed + '本' : '') + (skipped ? '／対象外（登録済み・名前が不一致） ' + skipped + '件' : '');
+    render();
+  }
+
+
+  window.addEventListener('message', async function (e) {
+    if (e.origin !== 'https://i.ytimg.com') return;
+    var m = e.data;
+    if (!m || m.type !== 'kokosodate-thumbs' || !Array.isArray(m.items)) return;
+    if (S.importing || S.gotThumbMsg) { try { e.source.postMessage({ type: 'kokosodate-thumbs-ack', n: 0, dup: true }, e.origin); } catch (x) {} return; }
+    S.gotThumbMsg = true;
+    if (!S.assets) S.assets = await window.claude.use('assets');
+    var files = m.items.filter(function (x) { return x && x.id && x.blob instanceof Blob; }).map(function (x) { return new File([x.blob], x.id + '.jpg', { type: x.blob.type || 'image/jpeg' }); });
+    try { e.source.postMessage({ type: 'kokosodate-thumbs-ack', n: files.length, ready: !!(S.assets && db) }, e.origin); } catch (x) {}
+    for (var t = 0; t < 40 && !S.loaded; t++) await wait(500);
+    if (S.assets && db && S.loaded) importThumbs(files); else { S.gotThumbMsg = false; }
+  });
+
+  render();
+  (async function () {
+    if (!window.claude || !window.claude.use) { S.error = 'nodb'; render(); return; }
+    db = await window.claude.use('db');
+    if (!db) { S.error = 'nodb'; render(); return; }
+    db.collection('videos').orderBy('order').onSnapshot(function (snap) {
+      S.docs = snap.docs.map(function (d) { var o = Object.assign({}, d.data()); o.id = d.id; return o; });
+      S.loaded = true; render();
+    }, function (err) { S.error = (err && err.code) || 'error'; render(); });
+    window.claude.use('user').then(async function (u) {
+      if (!u) return;
+      try { var c = await u.can('data.write'); if (c === false) { S.canWrite = false; render(); } } catch (e) {}
+    });
+    window.claude.use('assets').then(function (a) { S.assets = a; render(); });
+  })();
+})();
+</script>
+</body>
+</html>

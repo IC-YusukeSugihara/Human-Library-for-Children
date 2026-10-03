@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>弾け方A</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&amp;display=swap">
+<style>
+body{margin:0;background:#080B1F}
+a{color:#8FE9F5}a:hover{color:#C6F4FA}
+.app{font-family:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Hiragino Sans","Noto Sans JP",sans-serif;-webkit-user-select:none;user-select:none;touch-action:none}
+.sky{position:absolute;inset:0;background:radial-gradient(120% 55% at 50% 0%,#1B1F4D 0%,rgba(27,31,77,0) 62%),radial-gradient(90% 45% at 50% 100%,#0F2E3A 0%,rgba(15,46,58,0) 70%),#080B1F}
+.tw{position:absolute;border-radius:50%;background:#EAF0FF;animation:tw 3.2s ease-in-out infinite}
+@keyframes tw{0%,100%{opacity:.15}50%{opacity:.9}}
+.bwrap{position:absolute;animation-name:floatY;animation-timing-function:ease-in-out;animation-iteration-count:infinite}
+@keyframes floatY{0%,100%{transform:translate(0,0)}50%{transform:translate(5px,-14px)}}
+.bubble{position:absolute;left:0;top:0;width:100%;height:100%;border-radius:50%;border:1px solid rgba(255,255,255,.38);padding:0;margin:0;cursor:pointer;font-family:inherit;background:radial-gradient(circle at 50% 50%,rgba(140,220,255,.06) 0 52%,rgba(160,140,255,.26) 66%,rgba(255,255,255,.5) 70%,rgba(255,255,255,0) 72%);box-shadow:0 0 24px rgba(143,233,245,.18),inset 0 0 18px rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;outline:none}
+.bubble:focus-visible{outline:2px solid #8FE9F5;outline-offset:4px}
+.film{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,rgba(255,120,200,.3),rgba(120,200,255,.3),rgba(140,255,200,.24),rgba(255,230,140,.28),rgba(255,120,200,.3));-webkit-mask:radial-gradient(circle,transparent 56%,#000 68%,transparent 71%);mask:radial-gradient(circle,transparent 56%,#000 68%,transparent 71%);animation:film 7s linear infinite}
+@keyframes film{to{transform:rotate(360deg)}}
+.shine{position:absolute;left:19%;top:15%;width:24%;height:14%;border-radius:50%;background:rgba(255,255,255,.75);filter:blur(1px);transform:rotate(-32deg)}
+.blabel{position:relative;color:#F4F7FF;font-size:14px;font-weight:700;letter-spacing:.04em;text-shadow:0 1px 6px rgba(8,11,31,.95)}
+.fx{position:absolute;left:50%;top:50%;width:0;height:0;pointer-events:none}
+.rot{position:absolute;left:0;top:0;width:0;height:0}
+.popA{animation:popA .5s cubic-bezier(.3,.7,.4,1) forwards}
+@keyframes popA{0%{transform:scale(1)}22%{transform:scale(1.16,.86)}42%{transform:scale(.9,1.12)}58%{transform:scale(1.1);opacity:1}68%{transform:scale(1.35);opacity:0}100%{transform:scale(1.35);opacity:0}}
+.ringA{position:absolute;left:-50px;top:-50px;width:100px;height:100px;border-radius:50%;border:2px solid rgba(200,245,255,.9);opacity:0;animation:ringA .5s ease-out .3s forwards}
+@keyframes ringA{0%{transform:scale(.7);opacity:.95}100%{transform:scale(1.9);opacity:0}}
+.sparkA{position:absolute;left:-4px;top:-4px;width:8px;height:8px;border-radius:50%;background:#DFF9FF;box-shadow:0 0 10px #8FE9F5;opacity:0;animation:sparkA .55s cubic-bezier(.2,.8,.3,1) forwards}
+@keyframes sparkA{0%{transform:translateY(-34px) scale(1);opacity:1}100%{transform:translateY(-92px) scale(.2);opacity:0}}
+.popB{animation:popB .45s ease-in forwards}
+@keyframes popB{0%{transform:scale(1);filter:brightness(1)}35%{transform:scale(1.08);filter:brightness(2.4)}55%{transform:scale(.15);opacity:0}100%{transform:scale(.15);opacity:0}}
+.flashB{position:absolute;left:-60px;top:-60px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(255,246,214,.95) 0%,rgba(246,211,138,.45) 35%,rgba(246,211,138,0) 70%);opacity:0;animation:flashB .6s ease-out .12s forwards}
+@keyframes flashB{0%{transform:scale(.3);opacity:0}30%{transform:scale(1);opacity:1}100%{transform:scale(1.7);opacity:0}}
+.streakB{position:absolute;left:-1.5px;top:-8px;width:3px;height:16px;border-radius:2px;opacity:0;animation:streakB .65s cubic-bezier(.15,.8,.3,1) forwards}
+.streakB.gold{background:#F6D38A;box-shadow:0 0 8px #F6D38A}
+.streakB.cyan{background:#8FE9F5;box-shadow:0 0 8px #8FE9F5}
+@keyframes streakB{0%{transform:translateY(-14px) scaleY(.4);opacity:0}12%{opacity:1}100%{transform:translateY(-112px) scaleY(1.5);opacity:0}}
+.popC{animation:popC 1s ease-out forwards}
+@keyframes popC{0%{transform:scale(1);filter:blur(0);opacity:1}100%{transform:scale(1.7);filter:blur(12px);opacity:0}}
+.rippleC{position:absolute;left:-55px;top:-55px;width:110px;height:110px;border-radius:50%;border:1px solid rgba(190,170,255,.85);opacity:0;animation:rippleC 1.2s ease-out forwards}
+.rippleC.r2{animation-delay:.22s}.rippleC.r3{animation-delay:.44s}
+@keyframes rippleC{0%{transform:scale(.8);opacity:.7}100%{transform:scale(2.3);opacity:0}}
+.moteC{position:absolute;left:-3px;top:-3px;width:6px;height:6px;border-radius:50%;background:#E6DEFF;box-shadow:0 0 8px #B9A8FF;opacity:0;animation:moteC 1.4s ease-out forwards}
+@keyframes moteC{0%{transform:translateY(-10px);opacity:0}20%{opacity:.9}100%{transform:translateY(-84px);opacity:0}}
+.appear{animation:appear .6s cubic-bezier(.3,1.5,.5,1) both}
+@keyframes appear{0%{transform:scale(0);opacity:0}100%{transform:scale(1);opacity:1}}
+.star{position:absolute;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:#FFF6D6;box-shadow:0 0 12px 3px rgba(246,211,138,.8);animation:starTw 2.4s ease-in-out infinite;transition:left .9s cubic-bezier(.5,0,.2,1),top .9s cubic-bezier(.5,0,.2,1)}
+@keyframes starTw{0%,100%{opacity:.6}50%{opacity:1}}
+.logoPh{display:flex;align-items:center;justify-content:center;height:30px;padding:0 12px;border:1px dashed rgba(234,240,255,.45);border-radius:8px;color:#AEB8D9;font-size:11px}
+.charaPh{width:64px;height:64px;border-radius:50%;border:1px dashed rgba(234,240,255,.45);color:#AEB8D9;font-size:11px;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.3}
+.dot{width:8px;height:8px;border-radius:50%;background:rgba(234,240,255,.22)}
+.dot.on{background:#F6D38A;box-shadow:0 0 8px rgba(246,211,138,.9)}
+.scrim{position:absolute;inset:0;background:rgba(4,6,18,.45)}
+.sheet{position:absolute;left:0;right:0;bottom:0;padding:22px 20px 26px;border-radius:24px 24px 0 0;background:rgba(20,26,64,.86);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-top:1px solid rgba(143,233,245,.35);animation:sheetIn .35s cubic-bezier(.2,.9,.3,1) both}
+@keyframes sheetIn{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.opt{min-height:52px;border-radius:26px;border:1px solid rgba(143,233,245,.5);background:rgba(143,233,245,.08);color:#EAF0FF;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer}
+.opt:active{background:rgba(143,233,245,.25)}
+.skip{background:none;border:none;color:#AEB8D9;font-family:inherit;font-size:13px;text-decoration:underline;min-height:44px;padding:0 12px;cursor:pointer}
+.orb{position:absolute;left:115px;top:320px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(255,246,214,.95) 0%,rgba(246,211,138,.55) 30%,rgba(143,233,245,.15) 60%,rgba(143,233,245,0) 72%);animation:orb 1.9s ease-out .7s both}
+@keyframes orb{0%{transform:scale(0);opacity:0}45%{transform:scale(1);opacity:1}100%{transform:scale(1.25);opacity:.9}}
+.gtext{animation:fadeUp .8s ease-out 1.3s both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.stack{position:absolute;left:0;top:0;width:390px;transition:transform .55s cubic-bezier(.2,.8,.3,1);animation:fadeIn .7s ease-out both}
+.stack.drag{transition:none}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.ring{position:absolute;left:0;right:0;top:112px;height:360px;perspective:900px}
+.card{position:absolute;left:50%;top:50%;width:150px;height:200px;margin:-100px 0 0 -75px;padding:0;border-radius:16px;border:1px solid rgba(234,240,255,.22);overflow:hidden;background:#141A40;cursor:pointer;font-family:inherit;text-align:left;transition:transform .5s cubic-bezier(.2,.8,.3,1),opacity .5s}
+.ring.drag .card{transition:none}
+.card.front{border-color:rgba(246,211,138,.9);box-shadow:0 0 28px rgba(246,211,138,.35)}
+.thumb{display:flex;height:120px;align-items:center;justify-content:center;color:rgba(234,240,255,.8);font-size:11px}
+.ctitle{display:block;padding:10px 10px 0;color:#EAF0FF;font-size:13px;font-weight:700;line-height:1.4}
+.hint{display:flex;align-items:center;justify-content:center;gap:6px;color:#AEB8D9;font-size:12px}
+.chip{display:inline-flex;align-items:center;height:26px;padding:0 10px;border-radius:13px;background:rgba(246,211,138,.14);color:#F6D38A;font-size:12px;font-weight:700}
+.ph{border:1px dashed rgba(234,240,255,.35);border-radius:16px;color:#AEB8D9;font-size:13px;display:flex;align-items:center;justify-content:center}
+</style>
+</helmet>
+<div class="app" style="position: relative; width: 390px; height: 844px; overflow: hidden; background: #080B1F; color: #EAF0FF">
+<div class="sky"></div>
+<sc-for list="{{sky}}" as="k" hint-placeholder-count="45">
+<span class="tw" style="left: {{k.x}}px; top: {{k.y}}px; width: {{k.s}}px; height: {{k.s}}px; animation-delay: {{k.d}}s"></span>
+</sc-for>
+<div style="position: absolute; left: 20px; right: 20px; top: 20px; display: flex; align-items: center; justify-content: space-between">
+<div class="logoPh">ここソダテ ロゴ（仮）</div>
+
+</div>
+<p style="position: absolute; left: 24px; right: 24px; top: 74px; margin: 0; color: #EAF0FF; font-size: 19px; font-weight: 700; line-height: 1.6">今日のこと、<br>気になるシャボン玉からタップしてね</p>
+<sc-for list="{{bubbles}}" as="b" hint-placeholder-count="7">
+<div class="bwrap" style="left: {{b.x}}px; top: {{b.y}}px; width: {{b.size}}px; height: {{b.size}}px; animation-delay: {{b.delay}}s; animation-duration: {{b.dur}}s">
+<sc-if value="{{b.show}}" hint-placeholder-val="{{ true }}">
+<button class="{{b.cls}}" onClick="{{b.tap}}" aria-label="{{b.aria}}"><span class="film"></span><span class="shine"></span><span class="blabel">{{b.text}}</span></button>
+</sc-if>
+<sc-if value="{{b.fxA}}" hint-placeholder-val="{{ false }}">
+<span class="fx"><span class="ringA"></span><sc-for list="{{b.sparks}}" as="s" hint-placeholder-count="12"><span class="rot" style="transform: rotate({{s.a}}deg)"><span class="{{s.cls}}" style="animation-delay: {{s.d}}s"></span></span></sc-for></span>
+</sc-if>
+<sc-if value="{{b.fxB}}" hint-placeholder-val="{{ false }}">
+<span class="fx"><span class="flashB"></span><sc-for list="{{b.sparks}}" as="s" hint-placeholder-count="16"><span class="rot" style="transform: rotate({{s.a}}deg)"><span class="{{s.cls}}" style="animation-delay: {{s.d}}s"></span></span></sc-for></span>
+</sc-if>
+<sc-if value="{{b.fxC}}" hint-placeholder-val="{{ false }}">
+<span class="fx"><span class="rippleC"></span><span class="rippleC r2"></span><span class="rippleC r3"></span><sc-for list="{{b.sparks}}" as="s" hint-placeholder-count="7"><span class="rot" style="transform: rotate({{s.a}}deg)"><span class="{{s.cls}}" style="animation-delay: {{s.d}}s"></span></span></sc-for></span>
+</sc-if>
+</div>
+</sc-for>
+<div style="position: absolute; left: 20px; top: 752px; display: flex; align-items: center; gap: 12px">
+<div class="charaPh">キャラ<br>（仮）</div>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"popStyle":{"editor":"enum","options":["A","B","C"],"default":"A"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+
+    this.Q = [
+      { id: 1, short: 'きぶん', q: '今日の気分はどんな感じ？', opts: ['いい感じ', 'ふつう', 'ちょっとつかれた', 'しんどい'], x: 40, y: 180, size: 118, delay: 0, dur: 6.2 },
+      { id: 2, short: '起きた時間', q: '朝は何時ごろ起きた？', opts: ['6時より前', '6〜7時', '7〜8時', '8時よりあと'], x: 220, y: 172, size: 104, delay: -1.4, dur: 5.6 },
+      { id: 3, short: '朝ごはん', q: '朝ごはんは何を食べた？', opts: ['ごはん', 'パン', 'シリアル・ほか', '食べてない'], x: 140, y: 302, size: 112, delay: -2.6, dur: 6.8 },
+      { id: 4, short: '過ごした場所', q: '今日はどこで過ごした？', opts: ['家', '学校', 'それ以外'], x: 22, y: 432, size: 110, delay: -0.8, dur: 5.9 },
+      { id: 5, short: '話した人', q: '今日だれかと話した？', opts: ['家族', '友達', '先生', 'お店の人', '話してない'], x: 264, y: 312, size: 104, delay: -3.3, dur: 6.4 },
+      { id: 6, short: '夕方', q: '夕方は何をした？', opts: ['家でゆっくり', '習いごと・部活', '外で遊んだ', '勉強した'], x: 232, y: 472, size: 100, delay: -2.0, dur: 5.4 },
+      { id: 7, short: '夜ごはん', q: '夜ごはんは何を食べた？', opts: ['ごはんとおかず', 'めん', 'パン', 'そのほか'], x: 100, y: 582, size: 112, delay: -4.1, dur: 6.6 }
+    ];
+    let seed = 7;
+    const rnd = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
+    this.SKY = [];
+    for (let i = 0; i < 45; i++) {
+      this.SKY.push({ x: Math.round(rnd() * 386), y: Math.round(rnd() * 840), s: rnd() < 0.2 ? 3 : 1.5, d: -Math.round(rnd() * 320) / 100 });
+    }
+    this.FX = {
+      A: Array.from({ length: 12 }, (_, i) => ({ a: i * 30, cls: 'sparkA', d: 0.3 })),
+      B: Array.from({ length: 16 }, (_, i) => ({ a: i * 22.5, cls: 'streakB ' + (i % 2 ? 'gold' : 'cyan'), d: 0.16 })),
+      C: Array.from({ length: 7 }, (_, i) => ({ a: -54 + i * 18, cls: 'moteC', d: 0.1 + (i % 3) * 0.14 }))
+    };
+    this.OPEN_MS = { A: 430, B: 320, C: 520 };
+    this.DONE_MS = { A: 950, B: 900, C: 1350 };
+    const phases = {};
+    this.Q.forEach((q) => { phases[q.id] = 'idle'; });
+    this.timers = [];
+
+    this.state = { phases };
+  }
+
+  componentWillUnmount() { this.timers.forEach((t) => clearTimeout(t)); }
+  after(ms, fn) { this.timers.push(setTimeout(fn, ms)); }
+  setPhase(id, ph) { this.setState((s) => ({ phases: Object.assign({}, s.phases, { [id]: ph }) })); }
+
+  styleKey() { const s = this.props.popStyle; return (s === 'A' || s === 'B' || s === 'C') ? s : 'A'; }
+  tapBubble(id) {
+    if (this.state.phases[id] !== 'idle') return;
+    const k = this.styleKey();
+    this.setPhase(id, 'pop');
+    this.after(this.DONE_MS[k], () => this.setPhase(id, 'appear'));
+    this.after(this.DONE_MS[k] + 650, () => this.setPhase(id, 'idle'));
+  }
+  renderVals() {
+    const st = this.state;
+    const k = this.styleKey();
+    const bubbles = this.Q.map((q) => {
+      const ph = st.phases[q.id];
+      return {
+        x: q.x, y: q.y, size: q.size, delay: q.delay, dur: q.dur, text: q.short, aria: q.q,
+        show: true,
+        cls: 'bubble' + (ph === 'pop' ? ' pop' + k : (ph === 'appear' ? ' appear' : '')),
+        tap: () => this.tapBubble(q.id),
+        fxA: ph === 'pop' && k === 'A', fxB: ph === 'pop' && k === 'B', fxC: ph === 'pop' && k === 'C',
+        sparks: this.FX[k]
+      };
+    });
+    return { sky: this.SKY, bubbles };
+  }
+}
+</script>
+</body>
+</html>

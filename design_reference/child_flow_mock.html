@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>感謝アプリ 全体の流れ</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&amp;display=swap">
+<style>
+body{margin:0;background:#080B1F}
+a{color:#8FE9F5}a:hover{color:#C6F4FA}
+.app{font-family:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Hiragino Sans","Noto Sans JP",sans-serif;-webkit-user-select:none;user-select:none;touch-action:none}
+.sky{position:absolute;inset:0;background:radial-gradient(120% 55% at 50% 0%,#1B1F4D 0%,rgba(27,31,77,0) 62%),radial-gradient(90% 45% at 50% 100%,#0F2E3A 0%,rgba(15,46,58,0) 70%),#080B1F}
+.tw{position:absolute;border-radius:50%;background:#EAF0FF;animation:tw 3.2s ease-in-out infinite}
+@keyframes tw{0%,100%{opacity:.15}50%{opacity:.9}}
+.bwrap{position:absolute;animation-name:floatY;animation-timing-function:ease-in-out;animation-iteration-count:infinite}
+@keyframes floatY{0%,100%{transform:translate(0,0)}50%{transform:translate(5px,-14px)}}
+.bubble{position:absolute;left:0;top:0;width:100%;height:100%;border-radius:50%;border:1px solid rgba(255,255,255,.38);padding:0;margin:0;cursor:pointer;font-family:inherit;background:radial-gradient(circle at 50% 50%,rgba(140,220,255,.06) 0 52%,rgba(160,140,255,.26) 66%,rgba(255,255,255,.5) 70%,rgba(255,255,255,0) 72%);box-shadow:0 0 24px rgba(143,233,245,.18),inset 0 0 18px rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;outline:none}
+.bubble:focus-visible{outline:2px solid #8FE9F5;outline-offset:4px}
+.film{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,rgba(255,120,200,.3),rgba(120,200,255,.3),rgba(140,255,200,.24),rgba(255,230,140,.28),rgba(255,120,200,.3));-webkit-mask:radial-gradient(circle,transparent 56%,#000 68%,transparent 71%);mask:radial-gradient(circle,transparent 56%,#000 68%,transparent 71%);animation:film 7s linear infinite}
+@keyframes film{to{transform:rotate(360deg)}}
+.shine{position:absolute;left:19%;top:15%;width:24%;height:14%;border-radius:50%;background:rgba(255,255,255,.75);filter:blur(1px);transform:rotate(-32deg)}
+.blabel{position:relative;color:#F4F7FF;font-size:14px;font-weight:700;letter-spacing:.04em;text-shadow:0 1px 6px rgba(8,11,31,.95)}
+.fx{position:absolute;left:50%;top:50%;width:0;height:0;pointer-events:none}
+.rot{position:absolute;left:0;top:0;width:0;height:0}
+.popA{animation:popA .5s cubic-bezier(.3,.7,.4,1) forwards}
+@keyframes popA{0%{transform:scale(1)}22%{transform:scale(1.16,.86)}42%{transform:scale(.9,1.12)}58%{transform:scale(1.1);opacity:1}68%{transform:scale(1.35);opacity:0}100%{transform:scale(1.35);opacity:0}}
+.ringA{position:absolute;left:-50px;top:-50px;width:100px;height:100px;border-radius:50%;border:2px solid rgba(200,245,255,.9);opacity:0;animation:ringA .5s ease-out .3s forwards}
+@keyframes ringA{0%{transform:scale(.7);opacity:.95}100%{transform:scale(1.9);opacity:0}}
+.sparkA{position:absolute;left:-4px;top:-4px;width:8px;height:8px;border-radius:50%;background:#DFF9FF;box-shadow:0 0 10px #8FE9F5;opacity:0;animation:sparkA .55s cubic-bezier(.2,.8,.3,1) forwards}
+@keyframes sparkA{0%{transform:translateY(-34px) scale(1);opacity:1}100%{transform:translateY(-92px) scale(.2);opacity:0}}
+.popB{animation:popB .45s ease-in forwards}
+@keyframes popB{0%{transform:scale(1);filter:brightness(1)}35%{transform:scale(1.08);filter:brightness(2.4)}55%{transform:scale(.15);opacity:0}100%{transform:scale(.15);opacity:0}}
+.flashB{position:absolute;left:-60px;top:-60px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(255,246,214,.95) 0%,rgba(246,211,138,.45) 35%,rgba(246,211,138,0) 70%);opacity:0;animation:flashB .6s ease-out .12s forwards}
+@keyframes flashB{0%{transform:scale(.3);opacity:0}30%{transform:scale(1);opacity:1}100%{transform:scale(1.7);opacity:0}}
+.streakB{position:absolute;left:-1.5px;top:-8px;width:3px;height:16px;border-radius:2px;opacity:0;animation:streakB .65s cubic-bezier(.15,.8,.3,1) forwards}
+.streakB.gold{background:#F6D38A;box-shadow:0 0 8px #F6D38A}
+.streakB.cyan{background:#8FE9F5;box-shadow:0 0 8px #8FE9F5}
+@keyframes streakB{0%{transform:translateY(-14px) scaleY(.4);opacity:0}12%{opacity:1}100%{transform:translateY(-112px) scaleY(1.5);opacity:0}}
+.popC{animation:popC 1s ease-out forwards}
+@keyframes popC{0%{transform:scale(1);filter:blur(0);opacity:1}100%{transform:scale(1.7);filter:blur(12px);opacity:0}}
+.rippleC{position:absolute;left:-55px;top:-55px;width:110px;height:110px;border-radius:50%;border:1px solid rgba(190,170,255,.85);opacity:0;animation:rippleC 1.2s ease-out forwards}
+.rippleC.r2{animation-delay:.22s}.rippleC.r3{animation-delay:.44s}
+@keyframes rippleC{0%{transform:scale(.8);opacity:.7}100%{transform:scale(2.3);opacity:0}}
+.moteC{position:absolute;left:-3px;top:-3px;width:6px;height:6px;border-radius:50%;background:#E6DEFF;box-shadow:0 0 8px #B9A8FF;opacity:0;animation:moteC 1.4s ease-out forwards}
+@keyframes moteC{0%{transform:translateY(-10px);opacity:0}20%{opacity:.9}100%{transform:translateY(-84px);opacity:0}}
+.appear{animation:appear .6s cubic-bezier(.3,1.5,.5,1) both}
+@keyframes appear{0%{transform:scale(0);opacity:0}100%{transform:scale(1);opacity:1}}
+.star{position:absolute;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:#FFF6D6;box-shadow:0 0 12px 3px rgba(246,211,138,.8);animation:starTw 2.4s ease-in-out infinite;transition:left .9s cubic-bezier(.5,0,.2,1),top .9s cubic-bezier(.5,0,.2,1)}
+@keyframes starTw{0%,100%{opacity:.6}50%{opacity:1}}
+.logoPh{display:flex;align-items:center;justify-content:center;height:30px;padding:0 12px;border:1px dashed rgba(234,240,255,.45);border-radius:8px;color:#AEB8D9;font-size:11px}
+.charaPh{width:64px;height:64px;border-radius:50%;border:1px dashed rgba(234,240,255,.45);color:#AEB8D9;font-size:11px;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.3}
+.dot{width:8px;height:8px;border-radius:50%;background:rgba(234,240,255,.22)}
+.dot.on{background:#F6D38A;box-shadow:0 0 8px rgba(246,211,138,.9)}
+.scrim{position:absolute;inset:0;background:rgba(4,6,18,.45)}
+.sheet{position:absolute;left:0;right:0;bottom:0;padding:22px 20px 26px;border-radius:24px 24px 0 0;background:rgba(20,26,64,.86);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-top:1px solid rgba(143,233,245,.35);animation:sheetIn .35s cubic-bezier(.2,.9,.3,1) both}
+@keyframes sheetIn{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.opt{min-height:52px;border-radius:26px;border:1px solid rgba(143,233,245,.5);background:rgba(143,233,245,.08);color:#EAF0FF;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer}
+.opt:active{background:rgba(143,233,245,.25)}
+.skip{background:none;border:none;color:#AEB8D9;font-family:inherit;font-size:13px;text-decoration:underline;min-height:44px;padding:0 12px;cursor:pointer}
+.orb{position:absolute;left:115px;top:320px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(255,246,214,.95) 0%,rgba(246,211,138,.55) 30%,rgba(143,233,245,.15) 60%,rgba(143,233,245,0) 72%);animation:orb 1.9s ease-out .7s both}
+@keyframes orb{0%{transform:scale(0);opacity:0}45%{transform:scale(1);opacity:1}100%{transform:scale(1.25);opacity:.9}}
+.gtext{animation:fadeUp .8s ease-out 1.3s both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.stack{position:absolute;left:0;top:0;width:390px;transition:transform .55s cubic-bezier(.2,.8,.3,1);animation:fadeIn .7s ease-out both}
+.stack.drag{transition:none}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.ring{position:absolute;left:0;right:0;top:112px;height:360px;perspective:900px}
+.card{position:absolute;left:50%;top:50%;width:150px;height:200px;margin:-100px 0 0 -75px;padding:0;border-radius:16px;border:1px solid rgba(234,240,255,.22);overflow:hidden;background:#141A40;cursor:pointer;font-family:inherit;text-align:left;transition:transform .5s cubic-bezier(.2,.8,.3,1),opacity .5s}
+.ring.drag .card{transition:none}
+.card.front{border-color:rgba(246,211,138,.9);box-shadow:0 0 28px rgba(246,211,138,.35)}
+.thumb{display:flex;height:120px;align-items:center;justify-content:center;color:rgba(234,240,255,.8);font-size:11px}
+.ctitle{display:block;padding:10px 10px 0;color:#EAF0FF;font-size:13px;font-weight:700;line-height:1.4}
+.hint{display:flex;align-items:center;justify-content:center;gap:6px;color:#AEB8D9;font-size:12px}
+.chip{display:inline-flex;align-items:center;height:26px;padding:0 10px;border-radius:13px;background:rgba(246,211,138,.14);color:#F6D38A;font-size:12px;font-weight:700}
+.ph{border:1px dashed rgba(234,240,255,.35);border-radius:16px;color:#AEB8D9;font-size:13px;display:flex;align-items:center;justify-content:center}
+
+.bubble.child .blabel{font-size:12px}
+.star.small{width:7px;height:7px;margin:-3.5px 0 0 -3.5px}
+.opt.on{background:rgba(246,211,138,.22);border-color:#F6D38A;color:#FFF6D6}
+.decide{width:100%;min-height:52px;margin-top:14px;border-radius:26px;border:none;background:#F6D38A;color:#1A1E3F;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer}
+.decide:disabled{background:rgba(246,211,138,.25);color:rgba(26,30,63,.6);cursor:default}
+.goBtn{height:52px;padding:0 26px;border-radius:26px;border:none;background:#F6D38A;color:#1A1E3F;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 0 22px rgba(246,211,138,.45);animation:fadeUp .5s ease-out both}
+</style>
+</helmet>
+<div class="app" style="position: relative; width: 390px; height: 844px; overflow: hidden; background: #080B1F; color: #EAF0FF" onPointerDown="{{down}}" onPointerMove="{{move}}" onPointerUp="{{up}}" onPointerCancel="{{up}}" onPointerLeave="{{up}}">
+<div class="sky"></div>
+<sc-for list="{{sky}}" as="k" hint-placeholder-count="45">
+<span class="tw" style="left: {{k.x}}px; top: {{k.y}}px; width: {{k.s}}px; height: {{k.s}}px; animation-delay: {{k.d}}s"></span>
+</sc-for>
+
+<sc-if value="{{isBubbles}}" hint-placeholder-val="{{ true }}">
+<div style="position: absolute; left: 20px; right: 20px; top: 20px; display: flex; align-items: center; justify-content: space-between">
+<div class="logoPh">ここソダテ ロゴ（仮）</div>
+<div style="display: flex; gap: 6px">
+<sc-for list="{{dots}}" as="d" hint-placeholder-count="7"><span class="{{d.cls}}"></span></sc-for>
+</div>
+</div>
+<p style="position: absolute; left: 24px; right: 24px; top: 74px; margin: 0; color: #EAF0FF; font-size: 19px; font-weight: 700; line-height: 1.6">今日のこと、<br>気になるシャボン玉からタップしてね</p>
+<sc-for list="{{bubbles}}" as="b" hint-placeholder-count="7">
+<div class="bwrap" style="left: {{b.x}}px; top: {{b.y}}px; width: {{b.size}}px; height: {{b.size}}px; animation-delay: {{b.delay}}s; animation-duration: {{b.dur}}s">
+<sc-if value="{{b.show}}" hint-placeholder-val="{{ true }}">
+<button class="{{b.cls}}" onClick="{{b.tap}}" aria-label="{{b.aria}}"><span class="film"></span><span class="shine"></span><span class="blabel">{{b.text}}</span></button>
+</sc-if>
+<sc-if value="{{b.fxA}}" hint-placeholder-val="{{ false }}">
+<span class="fx"><span class="ringA"></span><sc-for list="{{b.sparks}}" as="s" hint-placeholder-count="12"><span class="rot" style="transform: rotate({{s.a}}deg)"><span class="{{s.cls}}" style="animation-delay: {{s.d}}s"></span></span></sc-for></span>
+</sc-if>
+<sc-if value="{{b.fxB}}" hint-placeholder-val="{{ false }}">
+<span class="fx"><span class="flashB"></span><sc-for list="{{b.sparks}}" as="s" hint-placeholder-count="16"><span class="rot" style="transform: rotate({{s.a}}deg)"><span class="{{s.cls}}" style="animation-delay: {{s.d}}s"></span></span></sc-for></span>
+</sc-if>
+<sc-if value="{{b.fxC}}" hint-placeholder-val="{{ false }}">
+<span class="fx"><span class="rippleC"></span><span class="rippleC r2"></span><span class="rippleC r3"></span><sc-for list="{{b.sparks}}" as="s" hint-placeholder-count="7"><span class="rot" style="transform: rotate({{s.a}}deg)"><span class="{{s.cls}}" style="animation-delay: {{s.d}}s"></span></span></sc-for></span>
+</sc-if>
+</div>
+</sc-for>
+<div style="position: absolute; left: 20px; top: 752px; display: flex; align-items: center; gap: 12px">
+<div class="charaPh">キャラ<br>（仮）</div>
+<sc-if value="{{notDone}}" hint-placeholder-val="{{ true }}"><span style="color: #AEB8D9; font-size: 13px">のこり {{remain}} こ</span></sc-if>
+<sc-if value="{{kidsHint}}" hint-placeholder-val="{{ false }}"><span style="color: #AEB8D9; font-size: 12px; line-height: 1.5">小さな泡は<br>答えなくてもOK</span></sc-if>
+</div>
+<sc-if value="{{allDone}}" hint-placeholder-val="{{ false }}">
+<button class="goBtn" style="position: absolute; right: 20px; top: 758px" onClick="{{goList}}">一覧へ</button>
+</sc-if>
+</sc-if>
+<sc-if value="{{showStars}}" hint-placeholder-val="{{ true }}">
+<sc-for list="{{stars}}" as="st" hint-placeholder-count="0"><span class="{{st.cls}}" style="left: {{st.x}}px; top: {{st.y}}px"></span></sc-for>
+</sc-if>
+<sc-if value="{{isGather}}" hint-placeholder-val="{{ false }}">
+<div class="orb"></div>
+<p class="gtext" style="position: absolute; left: 24px; right: 24px; top: 520px; margin: 0; text-align: center; color: #EAF0FF; font-size: 20px; font-weight: 700; line-height: 1.7">あなたの今日を<br>ささえてくれた人たちがいます</p>
+</sc-if>
+<sc-if value="{{sheetOpen}}" hint-placeholder-val="{{ false }}">
+<div class="scrim"></div>
+<div class="sheet">
+<p style="margin: 0 0 16px; color: #EAF0FF; font-size: 19px; font-weight: 700">{{sheetQ}}</p>
+<sc-if value="{{sheetMulti}}" hint-placeholder-val="{{ false }}"><p style="margin: -10px 0 14px; color: #AEB8D9; font-size: 13px">いくつでも選べます</p></sc-if>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+<sc-for list="{{sheetOpts}}" as="o" hint-placeholder-count="4"><button class="{{o.cls}}" onClick="{{o.pick}}">{{o.label}}</button></sc-for>
+</div>
+<sc-if value="{{sheetMulti}}" hint-placeholder-val="{{ false }}"><button class="decide" onClick="{{decide}}" disabled="{{decideOff}}">決定</button></sc-if>
+<div style="display: flex; justify-content: center; margin-top: 8px"><button class="skip" onClick="{{skip}}">こたえずに進む</button></div>
+</div>
+</sc-if>
+<sc-if value="{{isList}}" hint-placeholder-val="{{ false }}">
+<div class="{{stackCls}}" style="transform: translateY({{stackY}}px)">
+<section style="position: relative; height: 844px">
+<div style="position: absolute; left: 20px; right: 20px; top: 24px; display: flex; flex-direction: column; gap: 16px">
+<div class="logoPh" style="align-self: flex-start">ここソダテ ロゴ（仮）</div>
+<h2 style="margin: 8px 0 0; color: #EAF0FF; font-size: 22px">マイページ</h2>
+<div class="ph" style="height: 120px">感謝メーター（次の段階）</div>
+<div class="ph" style="height: 240px">マイページの中身（次の段階）</div>
+</div>
+<div class="hint" style="position: absolute; left: 0; right: 0; bottom: 28px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg><span>上に払うと一覧へ</span></div>
+</section>
+<section style="position: relative; height: 844px">
+<div class="hint" style="position: absolute; left: 0; right: 0; top: 18px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 15l6-6 6 6"></path></svg><span>下に引くとマイページ</span></div>
+<div style="position: absolute; left: 24px; right: 24px; top: 50px">
+<h2 style="margin: 0; color: #EAF0FF; font-size: 22px">今日のおすすめ</h2>
+<p style="margin: 4px 0 0; color: #AEB8D9; font-size: 13px">よこにスワイプして、1本えらんでね</p>
+</div>
+<div class="{{ringCls}}">
+<sc-for list="{{cards}}" as="c" hint-placeholder-count="10">
+<button class="{{c.cls}}" style="transform: translate3d({{c.x}}px, {{c.y}}px, {{c.z}}px); opacity: {{c.o}}; z-index: {{c.zi}}" onClick="{{c.pick}}" aria-label="{{c.title}}"><span class="thumb" style="background: {{c.bg}}">動画サムネイル（仮）</span><span class="ctitle">{{c.title}}</span></button>
+</sc-for>
+</div>
+<div style="position: absolute; left: 24px; right: 24px; top: 500px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<span class="chip">{{frontReason}}</span>
+<span style="color: #AEB8D9; font-size: 13px">{{frontNo}} / 10</span>
+</div>
+<h3 style="margin: 0; color: #EAF0FF; font-size: 21px; line-height: 1.45">{{frontTitle}}</h3>
+<p style="margin: 0; color: #C9D1EC; font-size: 15px; line-height: 1.7">{{frontSum}}</p>
+</div>
+<div class="hint" style="position: absolute; left: 0; right: 0; bottom: 26px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg><span>上に払うと履歴</span></div>
+</section>
+<section style="position: relative; height: 844px">
+<div class="hint" style="position: absolute; left: 0; right: 0; top: 24px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 15l6-6 6 6"></path></svg><span>下に引くと一覧へ</span></div>
+<div style="position: absolute; left: 20px; right: 20px; top: 64px; display: flex; flex-direction: column; gap: 14px">
+<h2 style="margin: 0; color: #EAF0FF; font-size: 22px">履歴</h2>
+<div class="ph" style="height: 96px">見た動画（次の段階）</div>
+<div class="ph" style="height: 96px">見た動画（次の段階）</div>
+<div class="ph" style="height: 96px">見た動画（次の段階）</div>
+</div>
+</section>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"popStyle":{"editor":"enum","options":["A","B","C"],"default":"A"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+
+    this.Q = [
+      { id: 1, short: 'きぶん', q: '今日の気分はどんな感じ？', opts: ['いい感じ', 'ふつう', 'ちょっとつかれた', 'しんどい'], x: 40, y: 180, size: 118, delay: 0, dur: 6.2 },
+      { id: 2, short: '起きた時間', q: '朝は何時ごろ起きた？', opts: ['6時より前', '6〜7時', '7〜8時', '8時よりあと'], x: 220, y: 172, size: 104, delay: -1.4, dur: 5.6 },
+      { id: 3, short: '朝ごはん', q: '朝ごはんは何を食べた？', opts: ['ごはん', 'パン', 'シリアル・ほか', '食べてない'], x: 140, y: 302, size: 112, delay: -2.6, dur: 6.8 },
+      { id: 4, short: '過ごした場所', q: '今日はどこで過ごした？', opts: ['家', '学校', 'それ以外'], x: 22, y: 432, size: 110, delay: -0.8, dur: 5.9 },
+      { id: 5, short: '話した人', q: '今日だれかと話した？', opts: ['家族', '友達', '先生', 'お店の人', '話してない'], x: 264, y: 312, size: 104, delay: -3.3, dur: 6.4 },
+      { id: 6, short: '夕方', q: '夕方は何をした？', opts: ['家でゆっくり', '習いごと・部活', '外で遊んだ', '勉強した'], x: 232, y: 472, size: 100, delay: -2.0, dur: 5.4 },
+      { id: 7, short: '夜ごはん', q: '夜ごはんは何を食べた？', opts: ['ごはんとおかず', 'めん', 'パン', 'そのほか'], x: 100, y: 582, size: 112, delay: -4.1, dur: 6.6 }
+    ];
+    let seed = 7;
+    const rnd = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
+    this.SKY = [];
+    for (let i = 0; i < 45; i++) {
+      this.SKY.push({ x: Math.round(rnd() * 386), y: Math.round(rnd() * 840), s: rnd() < 0.2 ? 3 : 1.5, d: -Math.round(rnd() * 320) / 100 });
+    }
+    this.FX = {
+      A: Array.from({ length: 12 }, (_, i) => ({ a: i * 30, cls: 'sparkA', d: 0.3 })),
+      B: Array.from({ length: 16 }, (_, i) => ({ a: i * 22.5, cls: 'streakB ' + (i % 2 ? 'gold' : 'cyan'), d: 0.16 })),
+      C: Array.from({ length: 7 }, (_, i) => ({ a: -54 + i * 18, cls: 'moteC', d: 0.1 + (i % 3) * 0.14 }))
+    };
+    this.OPEN_MS = { A: 430, B: 320, C: 520 };
+    this.DONE_MS = { A: 950, B: 900, C: 1350 };
+    const phases = {};
+    this.Q.forEach((q) => { phases[q.id] = 'idle'; });
+    this.timers = [];
+
+    const way = [{ short: '行き方', q: 'どうやって行った？', opts: ['歩き', '自転車', 'バス', '電車', '車'] }];
+    this.CHILD = {
+      3: {
+        'ごはん': [{ short: 'いっしょに', q: 'いっしょに食べたものは？', opts: ['たまご', 'なっとう', 'みそ汁', 'のり', '魚'] }],
+        'パン': [{ short: 'つけたもの', q: '何をつけた？', opts: ['バター', 'ジャム', 'たまご', 'なし'] }, { short: '飲みもの', q: 'いっしょに飲んだものは？', opts: ['牛乳', 'お茶', 'ジュース', '水'] }],
+        'シリアル・ほか': [{ short: 'かけたもの', q: '何をかけた？', opts: ['牛乳', 'ヨーグルト', 'なし'] }]
+      },
+      7: {
+        'ごはんとおかず': [{ short: 'おかず', q: 'おかずは？', opts: ['肉', '魚', 'たまご', '野菜', 'とうふ'] }],
+        'めん': [{ short: 'めん', q: 'どんなめん？', opts: ['うどん', 'そば', 'ラーメン', 'パスタ'] }]
+      },
+      4: { '学校': way, 'それ以外': way }
+    };
+    this.CPOS = { 3: [{ x: 120, y: 318 }, { x: 200, y: 372 }], 7: [{ x: 172, y: 650 }], 4: [{ x: 90, y: 500 }] };
+    this.CARDS = [
+      { tag: 'bread', title: '夜明け前のパン工房', sum: 'パンがお店に並ぶまでの、職人さんの朝を追いかけます。', h: 28 },
+      { tag: 'rice', title: 'お米をつくる一年', sum: '田植えから稲かりまで、田んぼを守る家族の仕事。', h: 95 },
+      { tag: 'truck', title: '夜をはしるトラック', sum: 'みんなが寝ている間に、食べものを運ぶドライバーさん。', h: 220 },
+      { tag: 'bed', title: 'ベッドができるまで', sum: '毎晩ねむるベッドを、ひとつずつ組み立てる工場の人たち。', h: 260 },
+      { tag: 'milk', title: '牛乳がとどくまで', sum: '牛のお世話をする人と、毎朝それを運ぶ人。', h: 190 },
+      { tag: 'school', title: '給食センターの朝', sum: 'たくさんの給食を、お昼までに作りきる人たち。', h: 35 },
+      { tag: 'rail', title: '終電のあとの線路点検', sum: '電車が止まった夜、線路を見回って安全を守る人たち。', h: 245 },
+      { tag: 'house', title: '家をたてる大工さん', sum: '住む人のことを思いながら、木をきざんで家をつくる。', h: 15 },
+      { tag: 'fish', title: '港の朝、漁師の仕事', sum: '夜明けの海へ出て、魚を食卓へとどける人たち。', h: 200 },
+      { tag: 'water', title: '水をきれいにする人', sum: '蛇口から出る水を、昼も夜も見守る浄水場の人たち。', h: 175, infra: true },
+      { tag: 'elec', title: '電気をつくる発電所', sum: 'スイッチを入れると明かりがつく。その電気を昼も夜もつくり続ける人たち。', h: 270, infra: true },
+      { tag: 'garbage', title: '朝のごみ収集', sum: 'まちが目をさます前に、ごみを集めて回る人たち。', h: 130, infra: true }
+    ];
+    this.g = null;
+    this.busy = false;
+    this.state = { screen: 'bubbles', phases, kids: [], sheet: null, sel: [], answers: {}, kidAnswers: {}, gathering: false, page: 1, rot: 0, dragRing: false, dragY: 0, dragV: false };
+  }
+
+  componentWillUnmount() { this.timers.forEach((t) => clearTimeout(t)); }
+  after(ms, fn) { this.timers.push(setTimeout(fn, ms)); }
+  setPhase(id, ph) { this.setState((s) => ({ phases: Object.assign({}, s.phases, { [id]: ph }) })); }
+
+  styleKey() { const s = this.props.popStyle; return (s === 'B' || s === 'C') ? s : 'A'; }
+  tapBubble(id) {
+    const st = this.state;
+    if (this.busy || st.screen !== 'bubbles' || st.phases[id] !== 'idle') return;
+    this.busy = true;
+    const k = this.styleKey();
+    this.setPhase(id, 'pop');
+    this.after(this.OPEN_MS[k], () => this.setState({ sheet: id, sel: [] }));
+    this.after(this.DONE_MS[k], () => this.setPhase(id, 'gone'));
+  }
+  answerParent(id, label) {
+    this.busy = false;
+    const defs = (label && this.CHILD[id]) ? (this.CHILD[id][label] || []) : [];
+    const pos = this.CPOS[id] || [];
+    const kids = defs.map((d, i) => ({ id: 'k' + id + '-' + i, parent: id, short: d.short, q: d.q, opts: d.opts, x: pos[i].x, y: pos[i].y, size: 66, delay: -i * 1.3, dur: 5.2 + i * 0.6 }));
+    this.setState((s) => {
+      const phases = Object.assign({}, s.phases);
+      kids.forEach((c) => { phases[c.id] = 'appear'; });
+      return { answers: Object.assign({}, s.answers, { [id]: label }), sheet: null, sel: [], kids: s.kids.concat(kids), phases };
+    });
+    kids.forEach((c) => this.after(650, () => this.setPhase(c.id, 'idle')));
+  }
+  toggle(opt) {
+    const sel = this.state.sel;
+    this.setState({ sel: sel.indexOf(opt) >= 0 ? sel.filter((o) => o !== opt) : sel.concat([opt]) });
+  }
+  answerKid(id, list) {
+    this.busy = false;
+    this.setState((s) => ({ kidAnswers: Object.assign({}, s.kidAnswers, { [id]: list }), sheet: null, sel: [] }));
+  }
+  goList() {
+    if (this.busy) return;
+    this.busy = true;
+    this.setState({ screen: 'gather' });
+    this.after(80, () => this.setState({ gathering: true }));
+    this.after(3000, () => this.setState({ screen: 'list', page: 1 }));
+  }
+  orderedCards() {
+    const a = this.state.answers;
+    const ka = this.state.kidAnswers;
+    const kids = this.state.kids;
+    const kid = (parent, short) => { const c = kids.find((x) => x.parent === parent && x.short === short); return c ? (ka[c.id] || []) : []; };
+    const why = {};
+    const order = [];
+    const add = (tag, text) => { if (tag && !why[tag]) { why[tag] = text; order.push(tag); } };
+    if (a[3] === 'パン') add('bread', '朝ごはん（パン）から');
+    else if (a[3] === 'ごはん') add('rice', '朝ごはん（ごはん）から');
+    else if (a[3] === 'シリアル・ほか') add('milk', '朝ごはん（シリアル）から');
+    if (kid(3, '飲みもの').concat(kid(3, 'かけたもの')).indexOf('牛乳') >= 0) add('milk', '朝ごはん（牛乳）から');
+    if (a[2]) add('bed', '起きた時間から');
+    if (a[4] === '家') add('house', '過ごした場所（家）から');
+    else if (a[4] === '学校') add('school', '過ごした場所（学校）から');
+    if (kid(4, '行き方').indexOf('電車') >= 0) add('rail', '移動（電車）から');
+    if (kid(7, 'おかず').indexOf('魚') >= 0) add('fish', '夜ごはん（魚）から');
+    if (a[7] === 'ごはんとおかず') add('rice', '夜ごはん（ごはん）から');
+    else if (a[7] === 'パン') add('bread', '夜ごはん（パン）から');
+    const out = order.map((t) => this.CARDS.find((c) => c.tag === t)).slice(0, 7);
+    const infra = this.CARDS.filter((c) => c.infra && !why[c.tag]).slice(0, 3);
+    [2, 5, 8].forEach((pos, j) => { if (infra[j]) out.splice(Math.min(pos, out.length), 0, infra[j]); });
+    this.CARDS.filter((c) => !c.infra && !why[c.tag]).forEach((c) => { if (out.length < 10) out.push(c); });
+    return out.slice(0, 10).map((c) => Object.assign({}, c, { reason: why[c.tag] || 'くらしをささえる仕事' }));
+  }
+  bringFront(i) {
+    if (this.g && this.g.moved) return;
+    const target = -i * 36;
+    const k = Math.round((this.state.rot - target) / 360);
+    this.setState({ rot: target + 360 * k });
+  }
+  down(e) {
+    if (this.state.screen !== 'list') return;
+    this.g = { x: e.clientX, y: e.clientY, mode: null, rot0: this.state.rot, moved: false, active: true };
+  }
+  move(e) {
+    const g = this.g;
+    if (!g || !g.active) return;
+    const dx = e.clientX - g.x;
+    const dy = e.clientY - g.y;
+    if (!g.mode) {
+      if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+      g.mode = Math.abs(dx) > Math.abs(dy) ? 'h' : 'v';
+      g.moved = true;
+    }
+    if (g.mode === 'h') {
+      if (this.state.page !== 1) return;
+      this.setState({ rot: g.rot0 + dx * 0.35, dragRing: true });
+    } else {
+      const p = this.state.page;
+      const edge = (p === 0 && dy > 0) || (p === 2 && dy < 0);
+      this.setState({ dragY: dy * (edge ? 0.15 : 0.6), dragV: true });
+    }
+  }
+  up(e) {
+    const g = this.g;
+    if (!g || !g.active) return;
+    g.active = false;
+    if (g.mode === 'h') {
+      this.setState({ rot: Math.round(this.state.rot / 36) * 36, dragRing: false });
+    } else if (g.mode === 'v') {
+      const dy = e.clientY - g.y;
+      let p = this.state.page;
+      if (dy > 60 && p > 0) p -= 1;
+      else if (dy < -60 && p < 2) p += 1;
+      this.setState({ page: p, dragY: 0, dragV: false });
+    }
+    this.after(60, () => { if (this.g === g) this.g = null; });
+  }
+  renderVals() {
+    const st = this.state;
+    const k = this.styleKey();
+    const fx = (ph) => ({ fxA: ph === 'pop' && k === 'A', fxB: ph === 'pop' && k === 'B', fxC: ph === 'pop' && k === 'C', sparks: this.FX[k] });
+    const parents = this.Q.map((q) => {
+      const ph = st.phases[q.id];
+      return Object.assign({
+        x: q.x, y: q.y, size: q.size, delay: q.delay, dur: q.dur, text: q.short, aria: q.q,
+        show: ph === 'idle' || ph === 'pop',
+        cls: 'bubble' + (ph === 'pop' ? ' pop' + k : ''),
+        tap: () => this.tapBubble(q.id)
+      }, fx(ph));
+    });
+    const kidBubbles = st.kids.map((c) => {
+      const ph = st.phases[c.id];
+      return Object.assign({
+        x: c.x, y: c.y, size: c.size, delay: c.delay, dur: c.dur, text: c.short, aria: c.q,
+        show: ph === 'idle' || ph === 'pop' || ph === 'appear',
+        cls: 'bubble child' + (ph === 'pop' ? ' pop' + k : (ph === 'appear' ? ' appear' : '')),
+        tap: () => this.tapBubble(c.id)
+      }, fx(ph));
+    });
+    const gx = (v) => st.gathering ? 195 : v;
+    const gy = (v) => st.gathering ? 400 : v;
+    const stars = this.Q.filter((q) => q.id in st.answers).map((q) => ({ cls: 'star', x: gx(q.x + q.size / 2), y: gy(q.y + q.size / 2) }))
+      .concat(st.kids.filter((c) => c.id in st.kidAnswers).map((c) => ({ cls: 'star small', x: gx(c.x + c.size / 2), y: gy(c.y + c.size / 2) })));
+    const dots = this.Q.map((q) => ({ cls: (q.id in st.answers) ? 'dot on' : 'dot' }));
+    const answered = Object.keys(st.answers).length;
+    const allDone = answered === this.Q.length;
+    const kidsLeft = st.kids.some((c) => !(c.id in st.kidAnswers));
+    let sheetQ = '';
+    let sheetMulti = false;
+    let sheetOpts = [];
+    let skip = () => {};
+    let decide = () => {};
+    if (st.sheet !== null) {
+      if (typeof st.sheet === 'number') {
+        const q = this.Q.find((x) => x.id === st.sheet);
+        sheetQ = q.q;
+        sheetOpts = q.opts.map((label) => ({ label, cls: 'opt', pick: () => this.answerParent(q.id, label) }));
+        skip = () => this.answerParent(q.id, null);
+      } else {
+        const c = st.kids.find((x) => x.id === st.sheet);
+        sheetQ = c.q;
+        sheetMulti = true;
+        sheetOpts = c.opts.map((label) => ({ label, cls: st.sel.indexOf(label) >= 0 ? 'opt on' : 'opt', pick: () => this.toggle(label) }));
+        skip = () => this.answerKid(c.id, []);
+        decide = () => this.answerKid(c.id, st.sel.slice());
+      }
+    }
+    const list = this.orderedCards();
+    const R = 220;
+    const cards = list.map((c, i) => {
+      const t = (i * 36 + st.rot) * Math.PI / 180;
+      const cos = Math.cos(t);
+      const sin = Math.sin(t);
+      const z = R * (cos - 1) * 1.1;
+      const f = Math.pow((cos + 1) / 2, 1.6);
+      return {
+        title: c.title,
+        bg: 'hsl(' + c.h + ', 38%, 28%)',
+        x: (R * sin).toFixed(1), y: (-(1 - cos) * 30).toFixed(1), z: z.toFixed(1),
+        o: (0.25 + 0.75 * f).toFixed(2), zi: Math.round(1000 + z),
+        cls: 'card',
+        pick: () => this.bringFront(i)
+      };
+    });
+    const fi = ((Math.round(-st.rot / 36) % 10) + 10) % 10;
+    cards[fi].cls = 'card front';
+    const front = list[fi];
+    return {
+      sky: this.SKY,
+      isBubbles: st.screen === 'bubbles', isGather: st.screen === 'gather', isList: st.screen === 'list',
+      showStars: st.screen !== 'list',
+      bubbles: parents.concat(kidBubbles), stars, dots,
+      remain: this.Q.length - answered, notDone: !allDone, allDone, kidsHint: allDone && kidsLeft,
+      goList: () => this.goList(),
+      sheetOpen: st.sheet !== null, sheetQ, sheetMulti, sheetOpts, skip, decide, decideOff: st.sel.length === 0,
+      cards, ringCls: st.dragRing ? 'ring drag' : 'ring',
+      frontTitle: front.title, frontSum: front.sum, frontReason: front.reason, frontNo: fi + 1,
+      stackCls: st.dragV ? 'stack drag' : 'stack',
+      stackY: (-st.page * 844 + st.dragY).toFixed(1),
+      down: (e) => this.down(e), move: (e) => this.move(e), up: (e) => this.up(e)
+    };
+  }
+}
+</script>
+</body>
+</html>
