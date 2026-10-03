@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "kansha-prod",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["--env-file=.env.local-test", "dist/server/index.js"],
+      "port": 3000
+    },
+    {
+      "name": "kansha-dev",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["dev"],
+      "port": 3000
+    }
+  ]
+}

@@ -4,3 +4,6 @@ dist/
 .env.*
 *.log
 kansha_spec.zip
+
+# 手元の仮DB（DATABASE_URL がないときに使う）
+.pglite/

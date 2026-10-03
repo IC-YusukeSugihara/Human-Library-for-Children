@@ -1,0 +1,87 @@
+:root {
+  --bg: #080b1f;
+  --panel: rgba(20, 26, 64, 0.86);
+  --text: #eaf0ff;
+  --text2: #c9d1ec;
+  --sub: #aeb8d9;
+  --gold: #f6d38a;
+  --gold-soft: #fff6d6;
+  --cyan: #8fe9f5;
+  --ink: #1a1e3f;
+  --ok: #a8e6a1;
+  --ng: #f2a7a0;
+  --line: rgba(234, 240, 255, 0.13);
+  --font: 'Zen Maru Gothic', 'Hiragino Maru Gothic ProN', 'Hiragino Sans', 'Noto Sans JP', 'Yu Gothic', sans-serif;
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  -webkit-text-size-adjust: 100%;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: var(--cyan);
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 3px;
+}
+
+/* 子どもの画面は1画面に固定し、ページ全体はスクロールさせない */
+html.mode-child,
+html.mode-child body {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* iPhone で入力欄に文字を打てるように（親で選択を止めていても、入力欄は選べるようにする） */
+input,
+textarea {
+  -webkit-user-select: text;
+  user-select: text;
+}
